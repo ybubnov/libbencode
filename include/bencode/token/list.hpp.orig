@@ -28,13 +28,12 @@ public:
               typename Pointer,
               typename Reference>
     list_token(
-        std::iterator<Class, basic_token, Distance, Pointer, Reference> begin,
-        std::iterator<Class, basic_token, Distance, Pointer, Reference> end)
+            std::iterator<Class, basic_token, Distance, Pointer, Reference> begin,
+            std::iterator<Class, basic_token, Distance, Pointer, Reference> end)
     {
         this->value.insert(begin, end);
     }
 
-    // Serialize the list token to the specified output stream.
     void dump(std::base_ostream<CharT, Traits> &s)
     {
         std::for_each(this->value.begin(), this->value.end(), [](auto element) {

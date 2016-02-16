@@ -23,14 +23,12 @@ public:
     string_token(std::basic_string<CharT, Traits, Allocator> &s) : value(s) { }
 
     // Serialie the string token to the specified output stream.
-    void dump(std::base_ostream<CharT, Traits> &s)
-    {
+    void dump(std::base_ostream<CharT, Traits> &s) {
         s << this->value.length() << ":" << this->value;
     }
 
     // Deserialize the string token from the specified input stream.
-    void load(std::base_istream<CharT, Traits> &s)
-    {
+    void load(std::base_istream<CharT, Traits> &s) {
         // TBD
     }
 
@@ -42,8 +40,7 @@ template<typename CharT
          typename Traits
          typename Allocator>
 basic_token<CharT, Traits> string(
-    std::basic_string<CharT, Traits, Allocator> s)
-{
+        std::basic_string<CharT, Traits, Allocator> s) {
     return string_token(s);
 }
 
