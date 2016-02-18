@@ -10,8 +10,10 @@
 namespace bencode {
 namespace token {
 
-template< typename CharT, typename Traits = std::char_traits<CharT>,
-          typename Allocator = std::allocator<CharT> >
+template
+< typename CharT
+, typename Traits = std::char_traits<CharT>
+, typename Allocator = std::allocator<CharT> >
 class basic_string : public basic_token<CharT, Traits> {
 private:
     std::basic_string<CharT, Traits, Allocator> value;

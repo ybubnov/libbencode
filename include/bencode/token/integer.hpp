@@ -9,8 +9,11 @@
 namespace bencode {
 namespace token {
 
-template< typename CharT, typename Traits = std::char_traits<CharT> >
-class basic_integer : public basic_token<CharT, Traits> {
+template
+< typename CharT
+, typename Traits = std::char_traits<CharT> >
+class basic_integer : public basic_token<CharT, Traits>
+{
 private:
     long long value;
 
