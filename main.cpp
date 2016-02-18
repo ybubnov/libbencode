@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include <bencode.hpp>
 #include <bencode/token.hpp>
@@ -32,8 +33,14 @@ int main(int argc, char **argv)
     l.push_back(&i);
     w.write(l);
 
+    auto v = std::vector<bencode::token::basic_token<char>*>();
+    v.push_back(&s);
+
     bencode::token::list l1 = {&s, &i};
-    w.write(l);
+    w.write(l1);
+
+    bencode::token::list l2(v.cbegin(), v.cend());
+    w.write(l2);
 
     return 1;
 }

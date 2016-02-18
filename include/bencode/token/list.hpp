@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <iterator>
 #include <initializer_list>
-#include <utility>
 #include <vector>
 
 #include <bencode/token/basic_token.hpp>
@@ -13,44 +12,42 @@
 namespace bencode {
 namespace token {
 
-template<
-    typename CharT,
-    typename Traits = std::char_traits<CharT>,
-    template <typename T, typename Allocator = std::allocator<T> > class Container = std::vector>
+
+template< typename CharT, typename Traits = ::std::char_traits<CharT>,
+          template < typename T, typename Allocator = ::std::allocator<T> >
+              class Container = ::std::vector >
 class basic_list : public basic_token<CharT, Traits> {
 private:
-    Container<basic_token<CharT, Traits>*> container;
+    typedef basic_token<CharT, Traits> _Token;
+    // Define the list container type to keep the collection
+    // of the Bencode tokens.
+    typedef Container<_Token*> _List_container;
 
-    // typedef std::iterator<typename Category,
-    //     typename Tp, typename Distance,
-    //     typename Pointer, typename Reference> _List_iterator;
+    // Define the list container interator.
+    typedef typename _List_container::const_iterator _List_const_iterator;
+
+    // The collections of the Bencode tokens.
+    _List_container container;
 
 public:
     basic_list() { }
 
     // Create a new list token from the initializer list.
-    basic_list(std::initializer_list<basic_token<CharT, Traits>*> l)
+    basic_list(::std::initializer_list<_Token*> l)
     : container(l) { }
 
-    // template <
-    //     typename Class,
-    //     typename Distance,
-    //     typename Pointer,
-    //     typename Reference>
-    // basic_list(
-    //     std::iterator<Class, basic_token<CharT, Traits>*, Distance, Pointer, Reference> begin,
-    //     std::iterator<Class, basic_token<CharT, Traits>*, Distance, Pointer, Reference> end)
-    // {
-    //     this->container.insert(begin, end);
-    // }
+    basic_list(_List_const_iterator cbegin, _List_const_iterator cend)
+    : container(cbegin, cend) { }
+
+    ~basic_list() { }
 
     // Serialize the list token to the specified output stream.
-    void dump(std::basic_ostream<CharT, Traits> &s)
+    void dump(::std::basic_ostream<CharT, Traits>& s)
     {
         s << "l";
 
-        std::for_each(this->container.begin(), this->container.end(),
-            [&s](basic_token<CharT, Traits> *value) {
+        ::std::for_each(this->container.begin(), this->container.end(),
+            [&s](_Token* value) {
 
             value->dump(s);
         });
@@ -59,12 +56,12 @@ public:
     }
 
     // Deserialize the list token from the specified input stream.
-    void load(std::basic_istream<CharT, Traits> &s)
+    void load(::std::basic_istream<CharT, Traits>& s)
     {
         // TBD
     }
 
-    void push_back(basic_token<CharT, Traits> *value)
+    void push_back(_Token* value)
     {
         this->container.push_back(value);
     }
@@ -75,6 +72,7 @@ typedef basic_list<char> list;
 
 
 typedef basic_list<wchar_t> wlist;
+
 
 } // namespace token
 } // namespace bencode
