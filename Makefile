@@ -1,6 +1,6 @@
 .PHONY: all, clean
 
-NAME    := bde
+NAME    := main
 
 BUILD   := build
 INCLUDE := -Iinclude

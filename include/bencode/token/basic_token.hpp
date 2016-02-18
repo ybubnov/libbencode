@@ -9,6 +9,7 @@
 namespace bencode {
 namespace token {
 
+
 template< typename CharT, typename Traits = std::char_traits<CharT> >
 // An abstract class for Bencode tokens.
 class basic_token {
@@ -23,9 +24,6 @@ public:
     virtual ~basic_token() { }
 };
 
-
-template<typename CharT, typename Traits>
-using _Token = basic_token<CharT, Traits>;
 
 } // namespace token
 } // namespace bencode
