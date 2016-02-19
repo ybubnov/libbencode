@@ -18,9 +18,11 @@ private:
     long long value;
 
 public:
-    basic_integer(const basic_integer &token) : value(token.value) { }
+    basic_integer(const basic_integer &token)
+    : value(token.value) { }
 
-    basic_integer(long long i) : value(i) { }
+    basic_integer(long long i)
+    : value(i) { }
 
     ~basic_integer() { }
 

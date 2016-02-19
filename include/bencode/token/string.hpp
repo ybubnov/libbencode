@@ -16,7 +16,13 @@ template
 , typename Allocator = std::allocator<CharT> >
 class basic_string : public basic_token<CharT, Traits> {
 private:
-    std::basic_string<CharT, Traits, Allocator> value;
+    typedef std::basic_string<CharT, Traits, Allocator> _String_type;
+
+    typedef typename _String_type::iterator iterator;
+
+    typedef typename _String_type::const_iterator const_iterator;
+
+    _String_type value;
 
 public:
     basic_string(const basic_string &token)
@@ -28,17 +34,26 @@ public:
     ~basic_string() { }
 
     // Serialie the basic_string token to the specified output stream.
-    void dump(std::basic_ostream<CharT, Traits> &s)
-    {
-        s << this->value.length() << ":" << this->value;
-    }
+    void
+    dump(std::basic_ostream<CharT, Traits> &s)
+    { s << this->value.length() << ":" << this->value; }
 
     // Deserialize the basic_string token from the specified input stream.
-    void load(std::basic_istream<CharT, Traits> &s)
-    {
-        // TBD
-    }
+    void
+    load(std::basic_istream<CharT, Traits> &s)
+    { /* TDB */ }
 
+    iterator
+    begin()
+    { return this->value.begin(); }
+
+    const_iterator
+    cbegin() const
+    { return this->value.cbegin(); }
+
+    const_iterator
+    cend() const
+    { return this->value.cend(); }
 };
 
 

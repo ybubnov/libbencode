@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <utility>
 
 #include <bencode.hpp>
 #include <bencode/token.hpp>
@@ -31,16 +32,20 @@ int main(int argc, char **argv)
     auto l = bencode::token::list();
     l.push_back(&s);
     l.push_back(&i);
-    w.write(l);
+    //w.write(l);
 
     auto v = std::vector<bencode::token::basic_token<char>*>();
     v.push_back(&s);
 
     bencode::token::list l1 = {&s, &i};
-    w.write(l1);
+    //w.write(l1);
 
     bencode::token::list l2(v.cbegin(), v.cend());
-    w.write(l2);
+    //w.write(l2);
+
+    auto d1 = bencode::token::dictionary();
+    d1.insert(std::pair<bencode::token::string, bencode::token::basic_token*>(s, &i));
+    w.write(d1);
 
     return 1;
 }
