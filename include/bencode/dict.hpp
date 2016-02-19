@@ -1,11 +1,10 @@
-#ifndef INCLUDE_bencode_token_dictionary_hpp__
-#define INCLUDE_bencode_token_dictionary_hpp__
+#ifndef INCLUDE_bencode_token_dict_hpp__
+#define INCLUDE_bencode_token_dict_hpp__
 
 #include <algorithm>
 #include <map>
 #include <utility>
-
-#include <bencode/token/basic_token.hpp>
+#include <bencode/token/basic_value.hpp>
 #include <bencode/token/string.hpp>
 
 
@@ -25,19 +24,19 @@ template
 , typename Compare
 , typename Allocator
 > class Container = std::map
-> class basic_dictionary : public basic_token<CharT, Traits>
+> class basic_dict : public basic_value<CharT, Traits>
 {
 private:
-    // Define the dictionary key alias.
+    // Define the dict key alias.
     typedef basic_string<CharT, Traits> _Key;
 
-    // Define the dictionary token alias.
-    typedef basic_token<CharT, Traits> _Token;
+    // Define the dict token alias.
+    typedef basic_value<CharT, Traits> _Token;
 
-    // Define the key-value pair for the dictionary container.
+    // Define the key-value pair for the dict container.
     typedef std::pair<const _Key, _Token*> value_type;
 
-    // Define the dictionary container key-value pairs allocator.
+    // Define the dict container key-value pairs allocator.
     typedef Allocator<value_type> _Alloc;
 
     // Define the lexicographical comparator as a wrapper
@@ -61,7 +60,7 @@ private:
     // comparator object.
     typedef lexicographical_compare<_Key> _Compare;
 
-    // Define the dictionary container type to keep the map
+    // Define the dict container type to keep the map
     // of the Bencode tokens.
     typedef Container<_Key, _Token, _Compare, _Alloc> _Dictionary_container;
 
@@ -77,9 +76,9 @@ private:
     _Dictionary_container container;
 
 public:
-    basic_dictionary() { }
+    basic_dict() { }
 
-    ~basic_dictionary() { }
+    ~basic_dict() { }
 
     void
     dump(std::basic_ostream<CharT, Traits> &__s)
@@ -111,14 +110,14 @@ public:
 };
 
 
-typedef basic_dictionary<char> dictionary;
+typedef basic_dict<char> dict;
 
 
-typedef basic_dictionary<wchar_t> wdictionary;
+typedef basic_dict<wchar_t> wdict;
 
 
 } // namespace token
 } // namespace bencode
 
 
-#endif // INCLUDE_bencode_token_dictionary_hpp__
+#endif // INCLUDE_bencode_token_dict_hpp__

@@ -2,8 +2,7 @@
 #define INCLUDE_bencode_token_integer_hpp__
 
 #include <string>
-
-#include <bencode/token/basic_token.hpp>
+#include <bencode/token/basic_value.hpp>
 
 
 namespace bencode {
@@ -12,7 +11,7 @@ namespace token {
 template
 < typename CharT
 , typename Traits = std::char_traits<CharT> >
-class basic_integer : public basic_token<CharT, Traits>
+class basic_integer : public basic_value<CharT, Traits>
 {
 private:
     long long value;

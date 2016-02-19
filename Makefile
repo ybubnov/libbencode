@@ -5,9 +5,8 @@ NAME    := main
 BUILD   := build
 INCLUDE := -Iinclude
 INCLUDE += -Iinclude/bencode
-INCLUDE += -Iinclude/bencode/token
 
-SOURCE  += include/bencode/token/*.hpp
+SOURCE  += include/bencode/*.hpp
 SOURCE  += include/*.hpp
 
 WARNING := -Wall

@@ -5,7 +5,7 @@
 #include <iterator>
 #include <initializer_list>
 #include <vector>
-#include <bencode/token/basic_token.hpp>
+#include <bencode/token/basic_value.hpp>
 
 
 namespace bencode {
@@ -21,11 +21,11 @@ template
 , template
 < typename T
 , typename Allocator > class Container = std::vector
-> class basic_list : public basic_token<CharT, Traits>
+> class basic_list : public basic_value<CharT, Traits>
 {
 private:
     // Define the list token alias.
-    typedef basic_token<CharT, Traits> _Token;
+    typedef basic_value<CharT, Traits> _Token;
 
     // Define the list container allocator for the tokens.
     typedef Allocator<_Token*> _Alloc;

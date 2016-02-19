@@ -3,8 +3,7 @@
 
 #include <memory>
 #include <string>
-
-#include <bencode/token/basic_token.hpp>
+#include <bencode/token/basic_value.hpp>
 
 
 namespace bencode {
@@ -14,7 +13,7 @@ template
 < typename CharT
 , typename Traits = std::char_traits<CharT>
 , typename Allocator = std::allocator<CharT> >
-class basic_string : public basic_token<CharT, Traits> {
+class basic_string : public basic_value<CharT, Traits> {
 private:
     typedef std::basic_string<CharT, Traits, Allocator> _String_type;
 
