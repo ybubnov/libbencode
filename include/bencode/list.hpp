@@ -54,7 +54,7 @@ public:
 
     // Serialize the list token to the specified output stream.
     void
-    dump(std::basic_ostream<CharT, Traits>& s)
+    dump(std::basic_ostream<CharT, Traits>& s) const
     {
         s << "l";
 
@@ -69,16 +69,12 @@ public:
 
     // Deserialize the list token from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits>& s)
-    {
-        // TBD
-    }
+    load(std::basic_istream<CharT, Traits>& s) const
+    { /* TBD */ }
 
     void
     push_back(_Token* value)
-    {
-        this->container.push_back(value);
-    }
+    { this->container.push_back(value); }
 };
 
 

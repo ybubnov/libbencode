@@ -61,7 +61,7 @@ private:
 
     // Define the dict container type to keep the map
     // of the Bencode tokens.
-    typedef Container<_Key, _Token, _Compare, _Alloc> _Dictionary_container;
+    typedef Container<_Key, _Token*, _Compare, _Alloc> _Dictionary_container;
 
     // Define the list constant iterator as a functional
     // equivalent to the container constant iterator.
@@ -77,31 +77,34 @@ private:
 public:
     basic_dict() { }
 
+    basic_dict(std::initializer_list<value_type> __list)
+    : container(__list.begin(), __list.end()) { }
+
     ~basic_dict() { }
 
     void
-    dump(std::basic_ostream<CharT, Traits> &__s)
+    dump(std::basic_ostream<CharT, Traits> &__s) const
     {
         __s << "d";
 
         std::for_each(this->container.cbegin(), this->container.cend(),
-            [&__s](value_type pair) {
+            [&__s](const value_type& value) {
 
-            pair.first->dump(__s);
+            value.first.dump(__s);
             __s << ":";
-            pair.second->dumps(__s);
+            value.second->dump(__s);
         });
 
         __s << "e";
     }
 
     void
-    load(std::basic_istream<CharT, Traits> &__s)
+    load(std::basic_istream<CharT, Traits> &__s) const
     { /* TBD */ }
 
-    // void
-    // insert(std::initializer_list<value_type> __list)
-    // { this->container.insert(__list.begin(), __list.cend()); }
+    void
+    insert(std::initializer_list<value_type> __list)
+    { this->container.insert(__list.begin(), __list.cend()); }
 
     std::pair<iterator, bool>
     insert(const value_type& __value)

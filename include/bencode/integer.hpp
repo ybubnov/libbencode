@@ -26,16 +26,14 @@ public:
     ~basic_integer() { }
 
     // Serialize the integer token to the specified output stream.
-    void dump(std::basic_ostream<CharT, Traits> &s)
-    {
-        s << "i" << value << "e";
-    }
+    void
+    dump(std::basic_ostream<CharT, Traits> &s) const
+    { s << "i" << value << "e"; }
 
     // Deserialize the integer token from the specified input stream.
-    void load(std::basic_istream<CharT, Traits> &s)
-    {
-        // TBD
-    }
+    void
+    load(std::basic_istream<CharT, Traits> &s) const
+    { /* TBD */ }
 };
 
 

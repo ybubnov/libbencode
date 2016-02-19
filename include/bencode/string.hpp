@@ -24,22 +24,25 @@ private:
     _String_type value;
 
 public:
-    basic_string(const basic_string &token)
-    : value(token.value) { }
+    basic_string(const basic_string &__string)
+    : value(__string.value) { }
 
-    basic_string(std::basic_string<CharT, Traits, Allocator> s)
-    : value(s) { }
+    basic_string(std::basic_string<CharT, Traits, Allocator> __s)
+    : value(__s) { }
+
+    basic_string(const CharT *__chars)
+    : value(__chars) { }
 
     ~basic_string() { }
 
     // Serialie the basic_string token to the specified output stream.
     void
-    dump(std::basic_ostream<CharT, Traits> &s)
+    dump(std::basic_ostream<CharT, Traits> &s) const
     { s << this->value.length() << ":" << this->value; }
 
     // Deserialize the basic_string token from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits> &s)
+    load(std::basic_istream<CharT, Traits> &s) const
     { /* TDB */ }
 
     iterator

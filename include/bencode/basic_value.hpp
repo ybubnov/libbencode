@@ -16,13 +16,16 @@ template
 class basic_value {
 public:
     // Serialie the token to the specified output stream.
-    virtual void dump(std::basic_ostream<CharT, Traits> &s) = 0;
+    virtual void
+    dump(std::basic_ostream<CharT, Traits> &s) const = 0;
 
     // Deserialize the token from the specified input stream.
-    virtual void load(std::basic_istream<CharT, Traits> &s) = 0;
+    virtual void
+    load(std::basic_istream<CharT, Traits> &s) const = 0;
 
     // Free the resources occupied by the token.
-    virtual ~basic_value() { }
+    virtual
+    ~basic_value() { }
 };
 
 

@@ -24,7 +24,7 @@ public:
 int main(int argc, char **argv)
 {
     writer<char, std::char_traits<char>> w(std::cout);
-    auto s = bencode::string(std::string("hello"));
+    auto s = bencode::string("hello");
     auto i = bencode::integer(42);
 
     auto l = bencode::list();
@@ -41,8 +41,8 @@ int main(int argc, char **argv)
     bencode::list l2(v.cbegin(), v.cend());
     //w.write(l2);
 
-    auto d1 = bencode::dict();
-    d1.insert(std::pair<bencode::basic_string, bencode::basic_value*>(s, &i));
+    bencode::dict d1 = {{bencode::string("bbb"), &l1}, {bencode::string("aaa"), &s}};
+    d1.insert(std::make_pair(s, &i));
     w.write(d1);
 
     return 1;
