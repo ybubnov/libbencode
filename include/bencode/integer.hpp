@@ -1,6 +1,7 @@
 #ifndef INCLUDE_bencode_token_integer_hpp__
 #define INCLUDE_bencode_token_integer_hpp__
 
+
 #include <string>
 #include <bencode/basic_value.hpp>
 
@@ -17,22 +18,22 @@ private:
     long long value;
 
 public:
-    basic_integer(const basic_integer &token)
-    : value(token.value) { }
+    basic_integer(const basic_integer &__i)
+    : value(__i.value) { }
 
-    basic_integer(long long i)
-    : value(i) { }
+    basic_integer(long long __i)
+    : value(__i) { }
 
     ~basic_integer() { }
 
     // Serialize the integer token to the specified output stream.
     void
-    dump(std::basic_ostream<CharT, Traits> &s) const
-    { s << "i" << value << "e"; }
+    dump(std::basic_ostream<CharT, Traits> &__s) const
+    { __s << "i" << value << "e"; }
 
     // Deserialize the integer token from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits> &s) const
+    load(std::basic_istream<CharT, Traits> &__s) const
     { /* TBD */ }
 };
 

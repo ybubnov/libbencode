@@ -1,6 +1,7 @@
 #ifndef INCLUDE_bencode_token_basic_value_hpp__
 #define INCLUDE_bencode_token_basic_value_hpp__
 
+#include <exception>
 #include <istream>
 #include <ostream>
 #include <string>
@@ -14,6 +15,19 @@ template
 , typename Traits = std::char_traits<CharT> >
 // An abstract class for Bencode tokens.
 class basic_value {
+private:
+    typedef typename Traits::int_type int_type;
+
+protected:
+    void ensure(std::basic_istream<CharT, Traits> &__s, int_type __c) const
+    {
+        const auto c = __s.peek();
+        if (c != __c) {
+            // TODO: implement the exception class
+            throw "invalid type";
+        }
+    }
+
 public:
     // Serialie the token to the specified output stream.
     virtual void
