@@ -3,7 +3,7 @@
 
 
 #include <bencode/basic_value.hpp>
-#include <bencode/dictionary.hpp>
+#include <bencode/dict.hpp>
 #include <bencode/integer.hpp>
 #include <bencode/list.hpp>
 #include <bencode/string.hpp>

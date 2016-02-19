@@ -5,11 +5,10 @@
 #include <iterator>
 #include <initializer_list>
 #include <vector>
-#include <bencode/token/basic_value.hpp>
+#include <bencode/basic_value.hpp>
 
 
 namespace bencode {
-namespace token {
 
 
 template
@@ -89,7 +88,6 @@ typedef basic_list<char> list;
 typedef basic_list<wchar_t> wlist;
 
 
-} // namespace token
 } // namespace bencode
 
 

@@ -7,7 +7,6 @@
 
 
 namespace bencode {
-namespace token {
 
 
 template
@@ -27,7 +26,6 @@ public:
 };
 
 
-} // namespace token
 } // namespace bencode
 
 

@@ -2,11 +2,11 @@
 #define INCLUDE_bencode_token_integer_hpp__
 
 #include <string>
-#include <bencode/token/basic_value.hpp>
+#include <bencode/basic_value.hpp>
 
 
 namespace bencode {
-namespace token {
+
 
 template
 < typename CharT
@@ -45,7 +45,6 @@ typedef basic_integer<char> integer;
 typedef basic_integer<wchar_t> winteger;
 
 
-} // namespace token
 } // namespace bencode
 
 

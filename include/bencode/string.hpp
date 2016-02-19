@@ -3,11 +3,11 @@
 
 #include <memory>
 #include <string>
-#include <bencode/token/basic_value.hpp>
+#include <bencode/basic_value.hpp>
 
 
 namespace bencode {
-namespace token {
+
 
 template
 < typename CharT
@@ -62,7 +62,6 @@ typedef basic_string<char> string;
 typedef basic_string<wchar_t> wstring;
 
 
-} // namespace token
 } // namespace bencode
 
 

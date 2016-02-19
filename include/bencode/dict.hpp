@@ -4,12 +4,11 @@
 #include <algorithm>
 #include <map>
 #include <utility>
-#include <bencode/token/basic_value.hpp>
-#include <bencode/token/string.hpp>
+#include <bencode/basic_value.hpp>
+#include <bencode/string.hpp>
 
 
 namespace bencode {
-namespace token {
 
 
 template
@@ -116,7 +115,6 @@ typedef basic_dict<char> dict;
 typedef basic_dict<wchar_t> wdict;
 
 
-} // namespace token
 } // namespace bencode
 
 
