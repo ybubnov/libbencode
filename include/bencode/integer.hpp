@@ -1,7 +1,6 @@
 #ifndef INCLUDE_bencode_token_integer_hpp__
 #define INCLUDE_bencode_token_integer_hpp__
 
-
 #include <string>
 #include <bencode/basic_value.hpp>
 
@@ -15,6 +14,8 @@ template
 class basic_integer : public basic_value<CharT, Traits>
 {
 private:
+    typedef basic_value<CharT, Traits> _Token;
+
     long long value;
 
 public:
@@ -29,7 +30,7 @@ public:
     // Serialize the integer token to the specified output stream.
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
-    { __s << "i" << value << "e"; }
+    { __s << _Token::int_type << value << _Token::end_type; }
 
     // Deserialize the integer token from the specified input stream.
     void
@@ -45,6 +46,5 @@ typedef basic_integer<wchar_t> winteger;
 
 
 } // namespace bencode
-
 
 #endif // INCLUDE_bencode_token_integer_hpp__

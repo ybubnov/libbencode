@@ -15,6 +15,8 @@ template
 , typename Allocator = std::allocator<CharT> >
 class basic_string : public basic_value<CharT, Traits> {
 private:
+    typedef basic_value<CharT, Traits> _Token;
+
     typedef std::basic_string<CharT, Traits, Allocator> _String_type;
 
     typedef typename _String_type::iterator iterator;
@@ -37,8 +39,8 @@ public:
 
     // Serialie the basic_string token to the specified output stream.
     void
-    dump(std::basic_ostream<CharT, Traits> &s) const
-    { s << this->value.length() << ":" << this->value; }
+    dump(std::basic_ostream<CharT, Traits> &__s) const
+    { __s << this->value.length() << _Token::delim_type << this->value; }
 
     // Deserialize the basic_string token from the specified input stream.
     void
@@ -66,6 +68,5 @@ typedef basic_string<wchar_t> wstring;
 
 
 } // namespace bencode
-
 
 #endif // INCLUDE_bencode_token_string_hpp__

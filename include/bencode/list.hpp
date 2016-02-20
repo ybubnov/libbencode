@@ -54,22 +54,22 @@ public:
 
     // Serialize the list token to the specified output stream.
     void
-    dump(std::basic_ostream<CharT, Traits>& s) const
+    dump(std::basic_ostream<CharT, Traits>& __s) const
     {
-        s << "l";
+        __s << _Token::list_type;
 
         std::for_each(this->container.begin(), this->container.end(),
-            [&s](_Token* value) {
+            [&__s](_Token* value) {
 
-            value->dump(s);
+            value->dump(__s);
         });
 
-        s << "e";
+        __s << _Token::end_type;
     }
 
     // Deserialize the list token from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits>& s) const
+    load(std::basic_istream<CharT, Traits>& __s) const
     { /* TBD */ }
 
     void
@@ -85,6 +85,5 @@ typedef basic_list<wchar_t> wlist;
 
 
 } // namespace bencode
-
 
 #endif // INCLUDE_bencode_token_list_hpp__

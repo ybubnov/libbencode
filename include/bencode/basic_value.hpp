@@ -10,32 +10,42 @@
 namespace bencode {
 
 
+#if 0
+template
+< typename CharT
+, typename Traits
+, std::basic_string<CharT, Traits>
+> class basic_lexer
+{
+public:
+};
+#endif
+
+
 template
 < typename CharT
 , typename Traits = std::char_traits<CharT> >
 // An abstract class for Bencode tokens.
 class basic_value {
-private:
-    typedef typename Traits::int_type int_type;
-
 protected:
-    void ensure(std::basic_istream<CharT, Traits> &__s, int_type __c) const
-    {
-        const auto c = __s.peek();
-        if (c != __c) {
-            // TODO: implement the exception class
-            throw "invalid type";
-        }
-    }
+    typedef typename Traits::char_type char_type;
 
 public:
+    // Define the template typename-dependent values
+    // of the Bencode format tokens.
+    static const auto delim_type = char_type(':');
+    static const auto int_type = char_type('i');
+    static const auto list_type = char_type('l');
+    static const auto dict_type = char_type('d');
+    static const auto end_type = char_type('e');
+
     // Serialie the token to the specified output stream.
     virtual void
-    dump(std::basic_ostream<CharT, Traits> &s) const = 0;
+    dump(std::basic_ostream<CharT, Traits> &__s) const = 0;
 
     // Deserialize the token from the specified input stream.
     virtual void
-    load(std::basic_istream<CharT, Traits> &s) const = 0;
+    load(std::basic_istream<CharT, Traits> &__s) const = 0;
 
     // Free the resources occupied by the token.
     virtual
@@ -44,6 +54,5 @@ public:
 
 
 } // namespace bencode
-
 
 #endif // INCLUDE_bencode_token_basic_value_hpp__

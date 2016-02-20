@@ -85,17 +85,17 @@ public:
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
     {
-        __s << "d";
+        __s << _Token::dict_type;
 
         std::for_each(this->container.cbegin(), this->container.cend(),
             [&__s](const value_type& value) {
 
             value.first.dump(__s);
-            __s << ":";
+            __s << _Token::delim_type;
             value.second->dump(__s);
         });
 
-        __s << "e";
+        __s << _Token::end_type;
     }
 
     void
@@ -119,6 +119,5 @@ typedef basic_dict<wchar_t> wdict;
 
 
 } // namespace bencode
-
 
 #endif // INCLUDE_bencode_token_dict_hpp__
