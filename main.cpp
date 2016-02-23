@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <bencode.hpp>
+#include <bencode/value.hpp>
+#include <bencode/scanner.hpp>
 
 
 template<typename CharT,

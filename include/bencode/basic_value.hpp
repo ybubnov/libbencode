@@ -1,25 +1,15 @@
-#ifndef INCLUDE_bencode_token_basic_value_hpp__
-#define INCLUDE_bencode_token_basic_value_hpp__
+#ifndef INCLUDE_bencode_basic_value_hpp__
+#define INCLUDE_bencode_basic_value_hpp__
 
+#include <algorithm>
 #include <exception>
 #include <istream>
+#include <memory>
 #include <ostream>
 #include <string>
 
 
 namespace bencode {
-
-
-#if 0
-template
-< typename CharT
-, typename Traits
-, std::basic_string<CharT, Traits>
-> class basic_lexer
-{
-public:
-};
-#endif
 
 
 template
@@ -55,4 +45,4 @@ public:
 
 } // namespace bencode
 
-#endif // INCLUDE_bencode_token_basic_value_hpp__
+#endif // INCLUDE_bencode_basic_value_hpp__

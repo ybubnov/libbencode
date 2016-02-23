@@ -1,7 +1,6 @@
-#ifndef INCLUDE_bencode_token_dict_hpp__
-#define INCLUDE_bencode_token_dict_hpp__
+#ifndef INCLUDE_bencode_dict_hpp__
+#define INCLUDE_bencode_dict_hpp__
 
-#include <algorithm>
 #include <map>
 #include <utility>
 #include <bencode/basic_value.hpp>
@@ -29,11 +28,13 @@ private:
     // Define the dict key alias.
     typedef basic_string<CharT, Traits> _Key;
 
-    // Define the dict token alias.
-    typedef basic_value<CharT, Traits> _Token;
+    // Define the dict value alias.
+    typedef basic_value<CharT, Traits> _Value;
+
+    typedef std::shared_ptr<_Value> _Value_Ptr;
 
     // Define the key-value pair for the dict container.
-    typedef std::pair<const _Key, _Token*> value_type;
+    typedef std::pair<const _Key, _Value_Ptr> value_type;
 
     // Define the dict container key-value pairs allocator.
     typedef Allocator<value_type> _Alloc;
@@ -60,8 +61,8 @@ private:
     typedef lexicographical_compare<_Key> _Compare;
 
     // Define the dict container type to keep the map
-    // of the Bencode tokens.
-    typedef Container<_Key, _Token*, _Compare, _Alloc> _Dictionary_container;
+    // of the Bencode values.
+    typedef Container<_Key, _Value_Ptr, _Compare, _Alloc> _Dictionary_container;
 
     // Define the list constant iterator as a functional
     // equivalent to the container constant iterator.
@@ -85,22 +86,30 @@ public:
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
     {
-        __s << _Token::dict_type;
+        __s << _Value::dict_type;
 
         std::for_each(this->container.cbegin(), this->container.cend(),
             [&__s](const value_type& value) {
 
             value.first.dump(__s);
-            __s << _Token::delim_type;
+            __s << _Value::delim_type;
             value.second->dump(__s);
         });
 
-        __s << _Token::end_type;
+        __s << _Value::end_type;
     }
 
     void
     load(std::basic_istream<CharT, Traits> &__s) const
-    { /* TBD */ }
+    {
+        if s.peek() != _Value::dict_type {
+            throw type_error(
+                "specified stream does not contain parsable"
+                "bencode dictionary value");
+        }
+
+        auto trailing_iter
+    }
 
     void
     insert(std::initializer_list<value_type> __list)
@@ -120,4 +129,4 @@ typedef basic_dict<wchar_t> wdict;
 
 } // namespace bencode
 
-#endif // INCLUDE_bencode_token_dict_hpp__
+#endif // INCLUDE_bencode_dict_hpp__

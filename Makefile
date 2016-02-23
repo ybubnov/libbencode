@@ -7,7 +7,6 @@ INCLUDE := -Iinclude
 INCLUDE += -Iinclude/bencode
 
 SOURCE  += include/bencode/*.hpp
-SOURCE  += include/*.hpp
 
 WARNING := -Wall
 WARNING += -Wpedantic
