@@ -2,14 +2,15 @@
 #define INCLUDE_bencode_basic_value_hpp__
 
 #include <algorithm>
-#include <exception>
 #include <istream>
 #include <memory>
 #include <ostream>
 #include <string>
+#include <bencode/exception.hpp>
 
 
-namespace bencode {
+namespace bencode
+{
 
 
 template

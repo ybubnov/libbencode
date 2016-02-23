@@ -8,7 +8,8 @@
 #include <bencode/basic_value.hpp>
 
 
-namespace bencode {
+namespace bencode
+{
 
 
 template
@@ -44,17 +45,17 @@ private:
     typedef typename _List_container::const_iterator const_iterator;
 
     // The collections of the Bencode values.
-    _List_container container;
+    _List_container _M_container;
 
 public:
     basic_list() { }
 
     // Create a new list value from the initializer list.
     basic_list(std::initializer_list<_Value_Ptr> l)
-    : container(l) { }
+    : _M_container(l) { }
 
     basic_list(const_iterator cbegin, const_iterator cend)
-    : container(cbegin, cend) { }
+    : _M_container(cbegin, cend) { }
 
     ~basic_list() { }
 
@@ -64,7 +65,7 @@ public:
     {
         __s << _Value::list_type;
 
-        std::for_each(this->container.begin(), this->container.end(),
+        std::for_each(_M_container.begin(), _M_container.end(),
             [&__s](_Value_Ptr value) {
 
             value->dump(__s);
@@ -77,32 +78,32 @@ public:
     void
     load(std::basic_istream<CharT, Traits>& __s) const
     {
-        if s.peek() != _Value::list_type {
+        if (__s.peek() != _Value::list_type) {
             throw type_error(
-                "specified stream does not contain parsable"
-                "bencode list value");
+                "bencode::list::load the specified stream does "
+                "not contain interpretable bencode list value\n");
         }
     }
 
     iterator
     begin()
-    { return this->container.begin(); }
+    { return _M_container.begin(); }
 
     iterator
     end()
-    { return this->container.end(); }
+    { return _M_container.end(); }
 
     const_iterator
     cbegin() const
-    { return this->container.cbegin(); }
+    { return _M_container.cbegin(); }
 
     const_iterator
     cend() const
-    { return this->container.cend(); }
+    { return _M_container.cend(); }
 
     void
-    push_back(_Value_Ptr& value)
-    { this->container.push_back(value); }
+    push_back(_Value_Ptr value)
+    { _M_container.push_back(value); }
 };
 
 

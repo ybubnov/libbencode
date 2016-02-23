@@ -7,7 +7,8 @@
 #include <bencode/string.hpp>
 
 
-namespace bencode {
+namespace bencode
+{
 
 
 template
@@ -73,13 +74,13 @@ private:
     typedef typename _Dictionary_container::const_iterator const_iterator;
 
     // The associative array of the key-value pairs.
-    _Dictionary_container container;
+    _Dictionary_container _M_container;
 
 public:
     basic_dict() { }
 
     basic_dict(std::initializer_list<value_type> __list)
-    : container(__list.begin(), __list.end()) { }
+    : _M_container(__list.begin(), __list.end()) { }
 
     ~basic_dict() { }
 
@@ -88,7 +89,7 @@ public:
     {
         __s << _Value::dict_type;
 
-        std::for_each(this->container.cbegin(), this->container.cend(),
+        std::for_each(_M_container.cbegin(), _M_container.cend(),
             [&__s](const value_type& value) {
 
             value.first.dump(__s);
@@ -102,22 +103,43 @@ public:
     void
     load(std::basic_istream<CharT, Traits> &__s) const
     {
-        if s.peek() != _Value::dict_type {
+        if (__s.peek() != _Value::dict_type) {
             throw type_error(
-                "specified stream does not contain parsable"
-                "bencode dictionary value");
+                "bencode::dict::load the specified stream does not "
+                "contain interpretable bencode dictionary value\n");
         }
 
-        auto trailing_iter
+        // Read the "d" symbol from the provided stream.
+        __s.get();
+
+        // At the next step we are going to decode the items
+        // of the B-encoded dictionary.
+        while (__s.peek() != _Value::end_type) {
+            // Read the key of the next dictionary item.
+            _Key __key;
+            __key.load(__s);
+
+            if (__s.peek() != _Value::delim_type) {
+                std::ostringstream __error(
+                    "bencode::dict::load after the key a `:` "
+                    "delimeter expected, but `");
+
+                __error << __s.peek() << "` found\n";
+                throw encoding_error(__error);
+            }
+
+            // Decode the value of the dictionary item.
+            // TDB.
+        }
     }
 
     void
     insert(std::initializer_list<value_type> __list)
-    { this->container.insert(__list.begin(), __list.cend()); }
+    { _M_container.insert(__list.begin(), __list.cend()); }
 
     std::pair<iterator, bool>
     insert(const value_type& __value)
-    { return this->container.insert(__value); }
+    { return _M_container.insert(__value); }
 };
 
 

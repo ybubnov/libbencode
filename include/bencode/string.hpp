@@ -4,7 +4,8 @@
 #include <bencode/basic_value.hpp>
 
 
-namespace bencode {
+namespace bencode
+{
 
 
 template

@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <bencode/value.hpp>
-#include <bencode/scanner.hpp>
+#include <bencode.hpp>
 
 
 template<typename CharT,
@@ -29,22 +28,22 @@ int main(int argc, char **argv)
     auto i = bencode::integer(42);
 
     auto l = bencode::list();
-    l.push_back(&s);
-    l.push_back(&i);
+    l.push_back(std::make_shared<bencode::string>(&s));
+    l.push_back(std::make_shared<bencode::integer>(&i));
     //w.write(l);
 
     auto v = std::vector<bencode::basic_value<char>*>();
-    v.push_back(&s);
+    v.push_back(std::shared_ptr<bencode::string>(&s));
 
-    bencode::list l1 = {&s, &i};
-    //w.write(l1);
+    //bencode::list l1 = {&s, &i};
+    ////w.write(l1);
 
-    bencode::list l2(v.cbegin(), v.cend());
-    //w.write(l2);
+    //bencode::list l2(v.cbegin(), v.cend());
+    ////w.write(l2);
 
-    bencode::dict d1 = {{bencode::string("bbb"), &l1}, {bencode::string("aaa"), &s}};
-    d1.insert(std::make_pair(s, &i));
-    w.write(d1);
+    //bencode::dict d1 = {{bencode::string("bbb"), &l1}, {bencode::string("aaa"), &s}};
+    //d1.insert(std::make_pair(s, &i));
+    //w.write(d1);
 
     return 1;
 }
