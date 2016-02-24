@@ -2,6 +2,7 @@
 #define INCLUDE_bencode_integer_hpp__
 
 #include <iterator>
+#include <sstream>
 #include <bencode/basic_value.hpp>
 
 
@@ -40,7 +41,7 @@ public:
 
     // Deserialize the integer value from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits> &__s) const
+    load(std::basic_istream<CharT, Traits> &__s)
     {
         // We must ensure that subsequent actions will be performed
         // for very likely integer value, otherwise and exception
@@ -55,32 +56,33 @@ public:
         __s.get();
 
         // Define the integer symbol representation placeholder.
-        std::basic_stringstream<CharT, Traits> __intval;
+        std::basic_stringstream<CharT, Traits> __i;
 
-        // Define the stream iterator to read the integer value.
-        auto __iter = std::istream_iterator<CharT, CharT, Traits>(__s);
+        // Define the input stream iterator of the provided stream to
+        // be able read the integer value symbol by symbol.
+        auto __si = std::istream_iterator<CharT, CharT, Traits>(__s);
+
+        // Define the output stream to as a buffer for the integer
+        // value, which will be later converted.
+        auto __ival = std::ostream_iterator<CharT, CharT, Traits>(__i);
 
         // Copy the values from the input stream into the integer
         // placeholder string stream.
-        for (; *__iter != _Value::end_type; __iter++, __intval++)
-        { *__intval = *__iter; }
+        for (; !__s.eof() && *__si != _Value::end_type; __si++, __ival++)
+        { *__ival = *__si; }
 
-        // Covert the value from the string
-        __intval >> _M_value;
+        // Covert the value from the string into the integer.
+        __i >> _M_value;
 
-        // Read the trailing "e" symbol from the provided stream.
-        if (__s.peek() != _Value::end_type) {
-            std::ostringstream __error(
-                "bencode::integer::load the end of the integer `e` "
-                "expected, but `");
+        // The "e" symbol should be already extracted at this moment,
+        // so validate that the iterator pointing right to it.
+        if (*__si != _Value::end_type) {
+            std::ostringstream __error;
 
-            __error << __s.peek() << "` found\n";
-            throw encoding_error(__error);
+            __error << "bencode::integer::load the end of the integer "
+                "`e` " << "expected, but `" << __s.peek() << "` found\n";
+            throw encoding_error(__error.str());
         }
-
-        // Extract the "e" symbol from the stream all
-        // validations where succeeded.
-        __s.get();
     }
 
     operator

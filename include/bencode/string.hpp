@@ -43,7 +43,7 @@ public:
 
     // Deserialize the basic_string value from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits> &s) const
+    load(std::basic_istream<CharT, Traits> &s)
     { /* TDB */ }
 
     iterator

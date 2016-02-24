@@ -36,7 +36,7 @@ public:
 
     // Deserialize the token from the specified input stream.
     virtual void
-    load(std::basic_istream<CharT, Traits> &__s) const = 0;
+    load(std::basic_istream<CharT, Traits> &__s) = 0;
 
     // Free the resources occupied by the token.
     virtual

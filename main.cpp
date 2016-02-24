@@ -28,12 +28,17 @@ int main(int argc, char **argv)
     auto i = bencode::integer(42);
 
     auto l = bencode::list();
-    l.push_back(std::make_shared<bencode::string>(&s));
-    l.push_back(std::make_shared<bencode::integer>(&i));
-    //w.write(l);
+    l.push_back(std::make_shared<bencode::string>(s));
+    l.push_back(std::make_shared<bencode::integer>(i));
+    w.write(l);
 
-    auto v = std::vector<bencode::basic_value<char>*>();
-    v.push_back(std::shared_ptr<bencode::string>(&s));
+    std::stringstream ss("i-123");
+
+    i = bencode::integer();
+    i.load(ss);
+
+    std::cout << std::endl;
+    w.write(i);
 
     //bencode::list l1 = {&s, &i};
     ////w.write(l1);

@@ -101,7 +101,7 @@ public:
     }
 
     void
-    load(std::basic_istream<CharT, Traits> &__s) const
+    load(std::basic_istream<CharT, Traits> &__s)
     {
         if (__s.peek() != _Value::dict_type) {
             throw type_error(

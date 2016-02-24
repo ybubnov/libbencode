@@ -76,7 +76,7 @@ public:
 
     // Deserialize the list value from the specified input stream.
     void
-    load(std::basic_istream<CharT, Traits>& __s) const
+    load(std::basic_istream<CharT, Traits>& __s)
     {
         if (__s.peek() != _Value::list_type) {
             throw type_error(
@@ -102,7 +102,7 @@ public:
     { return _M_container.cend(); }
 
     void
-    push_back(_Value_Ptr value)
+    push_back(const _Value_Ptr& value)
     { _M_container.push_back(value); }
 };
 
