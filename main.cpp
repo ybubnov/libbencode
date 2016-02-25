@@ -32,13 +32,19 @@ int main(int argc, char **argv)
     l.push_back(std::make_shared<bencode::integer>(i));
     w.write(l);
 
-    std::stringstream ss("i-123");
+    std::stringstream ss("i-123e");
 
     i = bencode::integer();
     i.load(ss);
 
     std::cout << std::endl;
     w.write(i);
+
+    std::stringstream s1("5:olleh");
+    s.load(s1);
+
+    std::cout << std::endl;
+    w.write(s);
 
     //bencode::list l1 = {&s, &i};
     ////w.write(l1);

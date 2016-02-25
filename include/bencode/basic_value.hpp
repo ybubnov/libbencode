@@ -30,6 +30,12 @@ public:
     static const auto dict_type = char_type('d');
     static const auto end_type = char_type('e');
 
+    // To prevent the buffer overload during the extraction of the length
+    // of the string value, we are going to limit the count of symbols to
+    // read up to twenty symbols. So if after read of twenty symbols an
+    // end of the token was not reached we should throw a error.
+    static const auto int_length = 20;
+
     // Serialie the token to the specified output stream.
     virtual void
     dump(std::basic_ostream<CharT, Traits> &__s) const = 0;

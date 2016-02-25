@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <sstream>
+#include <bencode/algorithm.hpp>
 #include <bencode/basic_value.hpp>
 
 
@@ -59,7 +60,7 @@ public:
         std::basic_stringstream<CharT, Traits> __i;
 
         // Define the input stream iterator of the provided stream to
-        // be able read the integer value symbol by symbol.
+        // be able to read the integer value symbol by symbol.
         auto __si = std::istream_iterator<CharT, CharT, Traits>(__s);
 
         // Define the output stream to as a buffer for the integer
@@ -68,19 +69,24 @@ public:
 
         // Copy the values from the input stream into the integer
         // placeholder string stream.
-        for (; !__s.eof() && *__si != _Value::end_type; __si++, __ival++)
-        { *__ival = *__si; }
+        auto __result = copy_until(__si, __ival,
+            [&__s](const CharT& __ch) {
+
+            // Additionally, check that we did not exceed the
+            // length of the stream to prevent hangs.
+            return !__s.eof() && __ch != _Value::end_type;
+        }, _Value::int_length);
 
         // Covert the value from the string into the integer.
         __i >> _M_value;
 
         // The "e" symbol should be already extracted at this moment,
         // so validate that the iterator pointing right to it.
-        if (*__si != _Value::end_type) {
+        if (*__result != _Value::end_type) {
             std::ostringstream __error;
 
             __error << "bencode::integer::load the end of the integer "
-                "`e` " << "expected, but `" << __s.peek() << "` found\n";
+                "`e` expected, but `" << *__result << "` found\n";
             throw encoding_error(__error.str());
         }
     }
