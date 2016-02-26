@@ -5,6 +5,7 @@
 #include <sstream>
 #include <bencode/algorithm.hpp>
 #include <bencode/basic_value.hpp>
+#include <bencode/typedef.hpp>
 
 
 namespace bencode
@@ -13,8 +14,8 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT> >
-class basic_integer : public basic_value<CharT, Traits>
+, typename Traits
+> class basic_integer : public basic_value<CharT, Traits>
 {
 private:
     typedef basic_value<CharT, Traits> _Value;
@@ -86,7 +87,7 @@ public:
             std::ostringstream __error;
 
             __error << "bencode::integer::load the end of the integer "
-                "`e` expected, but `" << *__result << "` found\n";
+                "`e` expected, but `" << CharT(*__result) << "` found\n";
             throw encoding_error(__error.str());
         }
     }

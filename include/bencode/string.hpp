@@ -4,7 +4,7 @@
 #include <iterator>
 #include <sstream>
 #include <bencode/basic_value.hpp>
-#include <iostream>
+#include <bencode/typedef.hpp>
 
 
 namespace bencode
@@ -13,9 +13,9 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT>
-, typename Allocator = std::allocator<CharT> >
-class basic_string : public basic_value<CharT, Traits> {
+, typename Traits
+, typename Allocator
+> class basic_string : public basic_value<CharT, Traits> {
 private:
     typedef basic_value<CharT, Traits> _Value;
 
@@ -28,6 +28,8 @@ private:
     _String_type _M_value;
 
 public:
+    basic_string() { }
+
     basic_string(const basic_string &__string)
     : _M_value(__string._M_value) { }
 
@@ -73,7 +75,7 @@ public:
             std::ostringstream __error;
 
             __error << "bencode::string::load the delimiter `:` "
-                " expected, but `" << *__result << "` found\n";
+                " expected, but `" << CharT(*__result) << "` found\n";
             throw encoding_error(__error.str());
         }
 

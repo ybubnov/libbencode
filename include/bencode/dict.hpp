@@ -5,6 +5,8 @@
 #include <utility>
 #include <bencode/basic_value.hpp>
 #include <bencode/string.hpp>
+#include <bencode/typedef.hpp>
+#include <bencode/istream.hpp>
 
 
 namespace bencode
@@ -13,16 +15,16 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT>
+, typename Traits
 , template
 < typename T
-> class Allocator = std::allocator
+> class Allocator
 , template
 < typename Key
 , typename T
 , typename Compare
 , typename Allocator
-> class Container = std::map
+> class Container
 > class basic_dict : public basic_value<CharT, Traits>
 {
 private:
@@ -84,6 +86,7 @@ public:
 
     ~basic_dict() { }
 
+    // Serialize the dictionary value to the specified output stream.
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
     {
@@ -100,6 +103,7 @@ public:
         __s << _Value::end_type;
     }
 
+    // Deserialize the dictionary value from the specified input stream.
     void
     load(std::basic_istream<CharT, Traits> &__s)
     {
@@ -112,24 +116,43 @@ public:
         // Read the "d" symbol from the provided stream.
         __s.get();
 
+        // Create a Bencode basic input stream.
+        basic_istream<CharT, Traits> __bstr(__s.rdbuf());
+
         // At the next step we are going to decode the items
-        // of the B-encoded dictionary.
-        while (__s.peek() != _Value::end_type) {
+        // of the Bencoded dictionary.
+        while (!__s.eof() && __s.peek() != _Value::end_type) {
             // Read the key of the next dictionary item.
             _Key __key;
+
+            // Extract the string key from the input stream.
             __key.load(__s);
 
+            // Ensure that key is separated from the value
+            // with the delimiter token, and throw an error
+            // otherwise.
             if (__s.peek() != _Value::delim_type) {
-                std::ostringstream __error(
-                    "bencode::dict::load after the key a `:` "
-                    "delimeter expected, but `");
+                std::ostringstream __error;
 
-                __error << __s.peek() << "` found\n";
-                throw encoding_error(__error);
+                __error << "bencode::dict::load after the key a `:` "
+                    "delimiter expected, but `" << CharT(__s.peek())
+                    << "` found\n";
+                throw encoding_error(__error.str());
             }
 
             // Decode the value of the dictionary item.
-            // TDB.
+            auto __value = __bstr.get();
+        }
+
+        // Ensure that all those operations where not performed
+        // for nothing, and check that the stream is pointing to
+        // the end token.
+        if (__s.peek() != _Value::end_type) {
+            std::ostringstream __error;
+
+            __error << "bencode::dict::load the end of the dictionary "
+                "`e` expected, but `" << CharT(__s.peek()) << "` found\n";
+            throw encoding_error(__error.str());
         }
     }
 

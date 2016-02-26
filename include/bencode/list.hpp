@@ -6,6 +6,7 @@
 #include <initializer_list>
 #include <vector>
 #include <bencode/basic_value.hpp>
+#include <bencode/typedef.hpp>
 
 
 namespace bencode
@@ -14,13 +15,14 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT>
+, typename Traits
 , template
 < typename T
-> class Allocator = std::allocator
+> class Allocator
 , template
 < typename T
-, typename Allocator > class Container = std::vector
+, typename Allocator
+> class Container
 > class basic_list : public basic_value<CharT, Traits>
 {
 private:
@@ -78,10 +80,23 @@ public:
     void
     load(std::basic_istream<CharT, Traits>& __s)
     {
+        // Ensure that the stream is starting with the valid
+        // list token, otherwise all subsequent actions will
+        // make more damage.
         if (__s.peek() != _Value::list_type) {
             throw type_error(
                 "bencode::list::load the specified stream does "
                 "not contain interpretable bencode list value\n");
+        }
+
+        // Read the "l" symbols from the provided stream.
+        __s.get();
+
+        // Decode the Bencode values one by one until the
+        // end of the stream or the list token.
+        while (!__s.eof() && __s.peek() != _Value::end_type) {
+            //ostream >> __next;
+            //
         }
     }
 
