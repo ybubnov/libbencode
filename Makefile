@@ -1,4 +1,4 @@
-.PHONY: all, clean
+.PHONY: all, clean, test
 
 NAME    := main
 
@@ -8,6 +8,14 @@ INCLUDE += -Iinclude/bencode
 
 SOURCE  += include/bencode/*.hpp
 SOURCE  += src/bencode/*.cpp
+
+TESTS   := $(wildcard test/*.cpp)
+RUNNERS := $(subst .cpp,.out,$(TESTS))
+
+TFLAGS  := --log_level=test_suite
+TFLAGS  += --show_progress
+
+DEVLIBS := -lboost_unit_test_framework
 
 WARNING := -Wall
 WARNING += -Wpedantic
@@ -20,22 +28,31 @@ OBJECTS := $(wildcard $(SOURCE))
 OBJECTS := $(subst .hpp,.o,$(OBJECTS))
 OBJECTS := $(subst .cpp,.o,$(OBJECTS))
 
-CC      := g++
+CXX     := g++
 
 all: $(BUILD) $(BUILD)/$(NAME)
 
 %.o: %.hpp
-	$(CC) $(CCFLAGS) -x c++ -c $^ -o $@
+	$(CXX) $(CCFLAGS) -x c++ -c $^ -o $@
 
 %.o: %.cpp
-	$(CC) $(CCFLAGS) -x c++ -c $^ -o $@
+	$(CXX) $(CCFLAGS) -x c++ -c $^ -o $@
 
 $(BUILD):
 	mkdir -p $(BUILD)
 
 $(BUILD)/$(NAME): main.cpp $(OBJECTS)
-	$(CC) $(CCFLAGS) $^ -o $@
+	$(CXX) $(CCFLAGS) $^ -o $@
+
+test/%: test/%.cpp $(OBJECTS)
+	$(CXX) $(CCFLAGS) -o $@ $^ $(DEVLIBS)
+
+run-%: test/%
+	$^ $(TFLAGS)
+
+test: $(RUNNERS) $(subst test/,run-,$(RUNNERS))
 
 clean:
 	rm -rf $(BUILD)
 	rm -rf $(OBJECTS)
+	rm -rf $(RUNNERS)

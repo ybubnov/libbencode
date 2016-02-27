@@ -94,6 +94,18 @@ public:
     operator
     value_type() const
     { return _M_value; }
+
+    bool
+    operator==(const basic_integer& __i) const noexcept(true)
+    { return _M_value == __i._M_value; }
+
+    bool
+    operator==(const long long __i) const noexcept(true)
+    { return _M_value == __i; }
+
+    bool
+    operator==(const int __i) const noexcept(true)
+    { return _M_value == (long long) __i; }
 };
 
 
