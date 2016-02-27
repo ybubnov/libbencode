@@ -4,7 +4,6 @@
 #include <iterator>
 #include <sstream>
 #include <bencode/basic_value.hpp>
-#include <bencode/typedef.hpp>
 
 
 namespace bencode
@@ -13,13 +12,17 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits
-, typename Allocator
+, typename Traits = std::char_traits<CharT>
+, template
+< typename T
+> class Allocator = std::allocator
 > class basic_string : public basic_value<CharT, Traits> {
 private:
     typedef basic_value<CharT, Traits> _Value;
 
-    typedef std::basic_string<CharT, Traits, Allocator> _String_type;
+    typedef Allocator<_Value> _Alloc;
+
+    typedef std::basic_string<CharT, Traits, _Alloc> _String_type;
 
     typedef typename _String_type::iterator iterator;
 
@@ -33,7 +36,7 @@ public:
     basic_string(const basic_string &__string)
     : _M_value(__string._M_value) { }
 
-    basic_string(std::basic_string<CharT, Traits, Allocator> __s)
+    basic_string(const _String_type& __s)
     : _M_value(__s) { }
 
     basic_string(const CharT *__chars)

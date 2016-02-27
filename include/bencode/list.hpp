@@ -6,7 +6,7 @@
 #include <initializer_list>
 #include <vector>
 #include <bencode/basic_value.hpp>
-#include <bencode/typedef.hpp>
+#include <bencode/utility.hpp>
 
 
 namespace bencode
@@ -15,14 +15,40 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits
+, typename Traits = std::char_traits<CharT>
 , template
 < typename T
 > class Allocator
 , template
 < typename T
 , typename Allocator
-> class Container
+> class ListContainer = std::vector
+, template
+< typename Key
+, typename T
+, typename Compare
+, typename Allocator
+> class DictContainer = std::map
+> std::shared_ptr<basic_value<CharT, Traits> >
+make_value(std::basic_istream<CharT, Traits> &__s);
+
+
+template
+< typename CharT
+, typename Traits = std::char_traits<CharT>
+, template
+< typename T
+> class Allocator = std::allocator
+, template
+< typename T
+, typename Allocator
+> class ListContainer = std::vector
+, template
+< typename Key
+, typename T
+, typename Compare
+, typename Allocator
+> class DictContainer = std::map
 > class basic_list : public basic_value<CharT, Traits>
 {
 private:
@@ -36,7 +62,7 @@ private:
 
     // Define the list container type to keep the collection
     // of the Bencode values.
-    typedef Container<_Value_Ptr, _Alloc> _List_container;
+    typedef ListContainer<_Value_Ptr, _Alloc> _List_container;
 
     // Define the list iterator as a functional
     // equivalent to the container iterator.
@@ -95,8 +121,12 @@ public:
         // Decode the Bencode values one by one until the
         // end of the stream or the list token.
         while (!__s.eof() && __s.peek() != _Value::end_type) {
-            //ostream >> __next;
-            //
+            // Decode the value of the next list item.
+            auto __value = make_value<CharT, Traits,
+                Allocator, ListContainer, DictContainer>(__s);
+
+            // Append the decoded item to the list.
+            _M_container.push_back(__value);
         }
     }
 

@@ -36,7 +36,7 @@ public:
     // end of the token was not reached we should throw a error.
     static const auto int_length = 20;
 
-    // Serialie the token to the specified output stream.
+    // Serialize the token to the specified output stream.
     virtual void
     dump(std::basic_ostream<CharT, Traits> &__s) const = 0;
 

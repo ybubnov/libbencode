@@ -1,12 +1,10 @@
 #ifndef INCLUDE_bencode_dict_hpp__
 #define INCLUDE_bencode_dict_hpp__
 
-#include <map>
 #include <utility>
 #include <bencode/basic_value.hpp>
 #include <bencode/string.hpp>
-#include <bencode/typedef.hpp>
-#include <bencode/istream.hpp>
+#include <bencode/utility.hpp>
 
 
 namespace bencode
@@ -15,21 +13,45 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits
+, typename Traits = std::char_traits<CharT>
 , template
 < typename T
 > class Allocator
+, template
+< typename T
+, typename Allocator
+> class ListContainer = std::vector
 , template
 < typename Key
 , typename T
 , typename Compare
 , typename Allocator
-> class Container
+> class DictContainer = std::map
+> std::shared_ptr<basic_value<CharT, Traits> >
+make_value(std::basic_istream<CharT, Traits> &__s);
+
+
+template
+< typename CharT
+, typename Traits = std::char_traits<CharT>
+, template
+< typename T
+> class Allocator = std::allocator
+, template
+< typename Key
+, typename T
+, typename Compare
+, typename Allocator
+> class DictContainer = std::map
+, template
+< typename T
+, typename Allocator
+> class ListContainer = std::vector
 > class basic_dict : public basic_value<CharT, Traits>
 {
 private:
     // Define the dict key alias.
-    typedef basic_string<CharT, Traits> _Key;
+    typedef basic_string<CharT, Traits, Allocator> _Key;
 
     // Define the dict value alias.
     typedef basic_value<CharT, Traits> _Value;
@@ -65,18 +87,18 @@ private:
 
     // Define the dict container type to keep the map
     // of the Bencode values.
-    typedef Container<_Key, _Value_Ptr, _Compare, _Alloc> _Dictionary_container;
+    typedef DictContainer<_Key, _Value_Ptr, _Compare, _Alloc> _Dict_container;
 
     // Define the list constant iterator as a functional
     // equivalent to the container constant iterator.
-    typedef typename _Dictionary_container::iterator iterator;
+    typedef typename _Dict_container::iterator iterator;
 
     // Define the list mutable iterator as a functional
     // equivalent to the container mutable iterator.
-    typedef typename _Dictionary_container::const_iterator const_iterator;
+    typedef typename _Dict_container::const_iterator const_iterator;
 
     // The associative array of the key-value pairs.
-    _Dictionary_container _M_container;
+    _Dict_container _M_container;
 
 public:
     basic_dict() { }
@@ -116,9 +138,6 @@ public:
         // Read the "d" symbol from the provided stream.
         __s.get();
 
-        // Create a Bencode basic input stream.
-        basic_istream<CharT, Traits> __bstr(__s.rdbuf());
-
         // At the next step we are going to decode the items
         // of the Bencoded dictionary.
         while (!__s.eof() && __s.peek() != _Value::end_type) {
@@ -140,8 +159,16 @@ public:
                 throw encoding_error(__error.str());
             }
 
+            // Extract the delimiter symbol from the input
+            // stream.
+            __s.get();
+
             // Decode the value of the dictionary item.
-            auto __value = __bstr.get();
+            auto __value = make_value<CharT, Traits,
+                Allocator, ListContainer, DictContainer>(__s);
+
+            // Insert a new element into the dictionary.
+            _M_container.insert(value_type(__key, __value));
         }
 
         // Ensure that all those operations where not performed

@@ -5,7 +5,6 @@
 #include <sstream>
 #include <bencode/algorithm.hpp>
 #include <bencode/basic_value.hpp>
-#include <bencode/typedef.hpp>
 
 
 namespace bencode
@@ -14,7 +13,7 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits
+, typename Traits = std::char_traits<CharT>
 > class basic_integer : public basic_value<CharT, Traits>
 {
 private:
