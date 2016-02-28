@@ -3,7 +3,7 @@
 
 #include <iterator>
 #include <sstream>
-#include <bencode/basic_value.hpp>
+#include <bencode/value.hpp>
 
 
 namespace bencode
@@ -12,31 +12,29 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT>
+, typename Traits
 , template
 < typename T
-> class Allocator = std::allocator
+> class Allocator
 > class basic_string : public basic_value<CharT, Traits> {
 private:
-    typedef basic_value<CharT, Traits> _Value;
+    using basic_value_type = basic_value<CharT, Traits>;
 
-    typedef Allocator<_Value> _Alloc;
-
-    typedef std::basic_string<CharT, Traits, _Alloc> _String_type;
-
-    typedef typename _String_type::iterator iterator;
-
-    typedef typename _String_type::const_iterator const_iterator;
-
-    _String_type _M_value;
+    using allocator_type = Allocator<basic_value_type>;
 
 public:
+    using string_type = std::basic_string<CharT, Traits, allocator_type>;
+
+    using iterator = typename string_type::iterator;
+
+    using const_iterator = typename string_type::const_iterator;
+
     basic_string() { }
 
     basic_string(const basic_string &__string)
     : _M_value(__string._M_value) { }
 
-    basic_string(const _String_type& __s)
+    basic_string(const string_type& __s)
     : _M_value(__s) { }
 
     basic_string(const CharT *__chars)
@@ -47,7 +45,8 @@ public:
     // Serialie the basic_string value to the specified output stream.
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
-    { __s << _M_value.length() << _Value::delim_type << _M_value; }
+    { __s << _M_value.length() << basic_value_type::delimiter_token
+        << _M_value; }
 
     // Deserialize the basic_string value from the specified input stream.
     void
@@ -71,10 +70,10 @@ public:
 
             // Additionally, check that we did not exceed the
             // length of the stream to prevent hangs.
-            return !__s.eof() && __ch != _Value::delim_type;
-        }, _Value::int_length);
+            return !__s.eof() && __ch != basic_value_type::delimiter_token;
+        }, basic_value_type::integer_length);
 
-        if (*__result != _Value::delim_type) {
+        if (*__result != basic_value_type::delimiter_token) {
             std::ostringstream __error;
 
             __error << "bencode::string::load the delimiter `:` "
@@ -94,14 +93,14 @@ public:
             throw encoding_error(__error.str());
         }
 
-        // Allocate the array of symbols of the specified string length.
+        // Allocate the list of symbols of the specified string length.
         std::unique_ptr<CharT[]> __str(new CharT[__count+1]);
 
-        // Read the string value into the symbol array.
+        // Read the string value into the symbol list.
         __s.get(__str.get(), std::streamsize(__count+1));
 
         // Initialize the internal value with a new string.
-        _M_value = _String_type(__str.get());
+        _M_value = string_type(__str.get());
     }
 
     iterator
@@ -121,8 +120,16 @@ public:
     { return _M_value.cend(); }
 
     operator
-    std::basic_string<CharT, Traits>() const
+    string_type() const
     { return _M_value; }
+
+    friend std::basic_ostream<CharT, Traits>&
+    operator<<(std::basic_ostream<CharT, Traits>& __s,
+        const basic_string& __i)
+    { __s << __i._M_value; return __s; }
+
+private:
+    string_type _M_value;
 };
 
 

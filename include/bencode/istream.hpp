@@ -3,7 +3,7 @@
 
 #include <ostream>
 #include <streambuf>
-#include <bencode/basic_value.hpp>
+#include <bencode/value.hpp>
 
 
 namespace bencode {

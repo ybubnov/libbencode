@@ -4,9 +4,7 @@
 #include <algorithm>
 #include <iterator>
 #include <initializer_list>
-#include <vector>
-#include <bencode/basic_value.hpp>
-#include <bencode/utility.hpp>
+#include <bencode/value.hpp>
 
 
 namespace bencode
@@ -15,41 +13,21 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT>
+, typename IntT
+, typename Traits
 , template
 < typename T
 > class Allocator
 , template
 < typename T
-, typename Allocator
-> class ListContainer = std::vector
+, typename... Args
+> class ListContainer
 , template
 < typename Key
 , typename T
-, typename Compare
-, typename Allocator
-> class DictContainer = std::map
-> std::shared_ptr<basic_value<CharT, Traits> >
-make_value(std::basic_istream<CharT, Traits> &__s);
-
-
-template
-< typename CharT
-, typename Traits = std::char_traits<CharT>
-, template
-< typename T
-> class Allocator = std::allocator
-, template
-< typename T
-, typename Allocator
-> class ListContainer = std::vector
-, template
-< typename Key
-, typename T
-, typename Compare
-, typename Allocator
-> class DictContainer = std::map
-> class basic_list : public basic_value<CharT, Traits>
+, typename... Args
+> class DictContainer
+> class basic_list: public basic_value<CharT, Traits>
 {
 private:
     // Define the list value alias.
@@ -76,22 +54,26 @@ private:
     _List_container _M_container;
 
 public:
-    basic_list() { }
+    basic_list()
+    { }
 
     // Create a new list value from the initializer list.
     basic_list(std::initializer_list<_Value_Ptr> l)
-    : _M_container(l) { }
+    : _M_container(l)
+    { }
 
     basic_list(const_iterator cbegin, const_iterator cend)
-    : _M_container(cbegin, cend) { }
+    : _M_container(cbegin, cend)
+    { }
 
-    ~basic_list() { }
+    ~basic_list()
+    { }
 
     // Serialize the list value to the specified output stream.
     void
     dump(std::basic_ostream<CharT, Traits>& __s) const
     {
-        __s << _Value::list_type;
+        __s << _Value::list_token;
 
         std::for_each(_M_container.begin(), _M_container.end(),
             [&__s](_Value_Ptr value) {
@@ -99,7 +81,7 @@ public:
             value->dump(__s);
         });
 
-        __s << _Value::end_type;
+        __s << _Value::end_token;
     }
 
     // Deserialize the list value from the specified input stream.
@@ -109,7 +91,7 @@ public:
         // Ensure that the stream is starting with the valid
         // list token, otherwise all subsequent actions will
         // make more damage.
-        if (__s.peek() != _Value::list_type) {
+        if (__s.peek() != _Value::list_token) {
             throw type_error(
                 "bencode::list::load the specified stream does "
                 "not contain interpretable bencode list value\n");
@@ -120,9 +102,9 @@ public:
 
         // Decode the Bencode values one by one until the
         // end of the stream or the list token.
-        while (!__s.eof() && __s.peek() != _Value::end_type) {
+        while (!__s.eof() && __s.peek() != _Value::end_token) {
             // Decode the value of the next list item.
-            auto __value = make_value<CharT, Traits,
+            auto __value = make_value<CharT, IntT, Traits,
                 Allocator, ListContainer, DictContainer>(__s);
 
             // Append the decoded item to the list.

@@ -4,7 +4,7 @@
 #include <iterator>
 #include <sstream>
 #include <bencode/algorithm.hpp>
-#include <bencode/basic_value.hpp>
+#include <bencode/value.hpp>
 
 
 namespace bencode
@@ -13,24 +13,20 @@ namespace bencode
 
 template
 < typename CharT
-, typename Traits = std::char_traits<CharT>
+, typename IntT
+, typename Traits
 > class basic_integer : public basic_value<CharT, Traits>
 {
 private:
-    typedef basic_value<CharT, Traits> _Value;
+    using basic_value_type = basic_value<CharT, Traits>;
 
-    typedef long long value_type;
-
-    value_type _M_value;
+    using value_type = IntT;
 
 public:
-    basic_integer()
-    : _M_value(0) { }
-
-    basic_integer(const basic_integer &__i)
+    basic_integer(const basic_integer& __i)
     : _M_value(__i._M_value) { }
 
-    basic_integer(long long __i)
+    basic_integer(value_type __i = 0)
     : _M_value(__i) { }
 
     ~basic_integer() { }
@@ -38,7 +34,8 @@ public:
     // Serialize the integer value to the specified output stream.
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
-    { __s << _Value::int_type << _M_value << _Value::end_type; }
+    { __s << basic_value_type::integer_token << _M_value
+        << basic_value_type::end_token; }
 
     // Deserialize the integer value from the specified input stream.
     void
@@ -47,7 +44,7 @@ public:
         // We must ensure that subsequent actions will be performed
         // for very likely integer value, otherwise and exception
         // should be raised.
-        if (__s.peek() != _Value::int_type) {
+        if (__s.peek() != basic_value_type::integer_token) {
             throw type_error(
                 "bencode::integer::load the specified stream does "
                 "not contain interpretable bencode integer value\n");
@@ -74,15 +71,15 @@ public:
 
             // Additionally, check that we did not exceed the
             // length of the stream to prevent hangs.
-            return !__s.eof() && __ch != _Value::end_type;
-        }, _Value::int_length);
+            return !__s.eof() && __ch != basic_value_type::end_token;
+        }, basic_value_type::integer_length);
 
         // Covert the value from the string into the integer.
         __i >> _M_value;
 
         // The "e" symbol should be already extracted at this moment,
         // so validate that the iterator pointing right to it.
-        if (*__result != _Value::end_type) {
+        if (*__result != basic_value_type::end_token) {
             std::ostringstream __error;
 
             __error << "bencode::integer::load the end of the integer "
@@ -100,12 +97,20 @@ public:
     { return _M_value == __i._M_value; }
 
     bool
-    operator==(const long long __i) const noexcept(true)
+    operator==(const value_type __i) const noexcept(true)
     { return _M_value == __i; }
 
     bool
     operator==(const int __i) const noexcept(true)
-    { return _M_value == (long long) __i; }
+    { return _M_value == (value_type) __i; }
+
+    friend std::basic_ostream<CharT, Traits>&
+    operator<<(std::basic_ostream<CharT, Traits>& __s,
+        const basic_integer& __i)
+    { __s << __i._M_value; return __s; }
+
+private:
+    value_type _M_value;
 };
 
 
