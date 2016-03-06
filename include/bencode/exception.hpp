@@ -37,6 +37,17 @@ public:
 };
 
 
+class value_error : public exception
+{
+public:
+    explicit
+    value_error(const std::string& __s);
+
+    virtual
+    ~value_error();
+};
+
+
 class encoding_error : public exception
 {
 public:

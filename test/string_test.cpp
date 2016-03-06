@@ -4,7 +4,6 @@
 #include <sstream>
 #include <boost/test/unit_test.hpp>
 #include <bencode.hpp>
-#include <iostream>
 
 
 BOOST_AUTO_TEST_SUITE(TestString)
