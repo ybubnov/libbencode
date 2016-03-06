@@ -145,8 +145,7 @@ public:
             __s.get();
 
             // Decode the value of the dictionary item.
-            auto __value = make_value<CharT, IntT, Traits,
-                Allocator, ListContainer, DictContainer>(__s);
+            auto __value = make_value<__bencode_dict_typenames>(__s);
 
             // Insert a new element into the dictionary.
             _M_container.insert(value_type(__key, __value));

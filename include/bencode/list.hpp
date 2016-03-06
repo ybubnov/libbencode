@@ -107,8 +107,7 @@ public:
         // end of the stream or the list token.
         while (!__s.eof() && __s.peek() != basic_value_type::end_token) {
             // Decode the value of the next list item.
-            auto __value = make_value<CharT, IntT, Traits,
-                Allocator, ListContainer, DictContainer>(__s);
+            auto __value = make_value<__bencode_dict_typenames>(__s);
 
             // Append the decoded item to the list.
             _M_container.push_back(__value);
