@@ -74,6 +74,23 @@ public:
  * @tparam ListContainer
  * @tparam DictContainer
  */
+#define __declare_dict \
+      typename CharT = char \
+    , typename IntT = int64_t \
+    , typename Traits = std::char_traits<CharT> \
+    , template \
+    < typename T \
+    > class Allocator = std::allocator \
+    , template \
+    < typename T \
+    , typename... Args \
+    > class ListContainer = std::vector \
+    , template \
+    < typename Key \
+    , typename T \
+    , typename... Args \
+    > class DictContainer = std::map
+
 template
 < typename CharT
 , typename IntT = int64_t
@@ -123,6 +140,33 @@ template
 > class basic_dict;
 
 
+template
+< typename CharT = char
+, typename IntT = int64_t
+, typename Traits = std::char_traits<CharT>
+, template
+< typename T
+> class Allocator = std::allocator
+, template
+< typename Key
+, typename T
+, typename... Args
+> class DictContainer = std::map
+, template
+< typename T
+, typename... Args
+> class ListContainer = std::vector
+> std::shared_ptr<
+    basic_dict<CharT, IntT, Traits, Allocator,
+        DictContainer, ListContainer>>
+make_dict(std::intializer_list<
+    std::pair<std::basic_string<CharT, Traits, Allocator>,
+        basic_value<CharT, Traits>> __list)
+{
+    return nullptr;
+}
+
+
 /**
  * @brief Template class basic_integer.
  *
@@ -136,6 +180,19 @@ template
 , typename IntT = int64_t
 , typename Traits = std::char_traits<CharT>
 > class basic_integer;
+
+
+template
+< typename CharT = char
+, typename IntT = int64_t
+, typename Traits = std::char_traits<CharT>
+> std::shared_ptr<
+    basic_integer<CharT, IntT, Traits>>
+make_integer(IntT __value)
+{
+    return std::make_shared<basic_integer<
+        CharT, IntT, Traits>>(__value);
+}
 
 
 /**

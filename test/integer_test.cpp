@@ -15,13 +15,13 @@ BOOST_AUTO_TEST_CASE(test_load)
     bencode::integer i1;
 
     i1.load(ss1);
-    BOOST_CHECK(i1 == 291346);
+    BOOST_CHECK(i1 == int64_t(291346));
 
     std::wstringstream ss2(L"i1864795134e");
     bencode::winteger i2;
 
     i2.load(ss2);
-    BOOST_CHECK(i2 == 1864795134);
+    BOOST_CHECK(i2 == int64_t(1864795134));
 }
 
 

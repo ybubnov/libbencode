@@ -94,9 +94,13 @@ public:
         std::for_each(_M_container.cbegin(), _M_container.cend(),
             [&__s](const value_type& value) {
 
-            value.first.dump(__s);
-            __s << basic_value_type::delimiter_token;
-            value.second->dump(__s);
+            // To prevent access to the memory by null pointer
+            // validate that the object is valid first.
+            if (value.second != nullptr) {
+                value.first.dump(__s);
+                __s << basic_value_type::delimiter_token;
+                value.second->dump(__s);
+            }
         });
 
         __s << basic_value_type::end_token;
@@ -183,6 +187,10 @@ public:
     const_iterator
     cend()
     { return _M_container.cend(); }
+
+    value_ptr_type&
+    operator[](const CharT* __key)
+    { return _M_container.operator[](key_type(__key)); }
 
 private:
     // The associative list of the key-value pairs.

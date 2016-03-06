@@ -6,6 +6,7 @@
 #include <bencode/ostream.hpp>
 
 
+
 int main(int argc, char **argv)
 {
     bencode::ostream bs(std::cout.rdbuf());
@@ -15,17 +16,21 @@ int main(int argc, char **argv)
     bencode::dict d1;
 
     bi1 >> d1;
-    bs << d1;
+    //bs << d1;
 
     std::stringstream s2("l5:firsti12345e6:second5:helloe");
     bencode::istream bi2(s2.rdbuf());
     bencode::list l1;
 
     bi2 >> l1;
-    bs << l1;
+    //bs << l1;
 
-    bencode::integer i1(123);
-    std::cout << i1;
+    d1["value"] = bencode::make_integer(666);
+    bs << *d1["value"];
+
+    bencode::list l2(2);
+    l2[0] = bencode::make_integer(777);
+    bs << l2;
 
     return 0;
 }

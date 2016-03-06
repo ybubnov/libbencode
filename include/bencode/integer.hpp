@@ -100,10 +100,6 @@ public:
     operator==(const value_type __i) const noexcept(true)
     { return _M_value == __i; }
 
-    bool
-    operator==(const int __i) const noexcept(true)
-    { return _M_value == (value_type) __i; }
-
     friend std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& __s,
         const basic_integer& __i)

@@ -31,34 +31,35 @@ template
 {
 private:
     // Define the list value alias.
-    typedef basic_value<CharT, Traits> _Value;
+    using basic_value_type = basic_value<CharT, Traits>;
 
-    typedef std::shared_ptr<_Value> _Value_Ptr;
+    using value_ptr_type = std::shared_ptr<basic_value_type>;
 
+public:
     // Define the list container allocator for the values.
-    typedef Allocator<_Value_Ptr> _Alloc;
+    using allocator_type = Allocator<value_ptr_type>;
 
     // Define the list container type to keep the collection
     // of the Bencode values.
-    typedef ListContainer<_Value_Ptr, _Alloc> _List_container;
+    using container_type = ListContainer<value_ptr_type, allocator_type>;
 
     // Define the list iterator as a functional
     // equivalent to the container iterator.
-    typedef typename _List_container::iterator iterator;
+    using iterator = typename container_type::iterator;
 
     // Define the list constant iterator as a functional
     // equivalent to the container iterator.
-    typedef typename _List_container::const_iterator const_iterator;
+    using const_iterator = typename container_type::const_iterator;
 
-    // The collections of the Bencode values.
-    _List_container _M_container;
-
-public:
     basic_list()
     { }
 
+    basic_list(std::size_t __count)
+    :_M_container(__count)
+    { }
+
     // Create a new list value from the initializer list.
-    basic_list(std::initializer_list<_Value_Ptr> l)
+    basic_list(std::initializer_list<value_ptr_type> l)
     : _M_container(l)
     { }
 
@@ -73,15 +74,17 @@ public:
     void
     dump(std::basic_ostream<CharT, Traits>& __s) const
     {
-        __s << _Value::list_token;
+        __s << basic_value_type::list_token;
 
         std::for_each(_M_container.begin(), _M_container.end(),
-            [&__s](_Value_Ptr value) {
+            [&__s](value_ptr_type value) {
 
-            value->dump(__s);
+            if (value != nullptr) {
+                value->dump(__s);
+            }
         });
 
-        __s << _Value::end_token;
+        __s << basic_value_type::end_token;
     }
 
     // Deserialize the list value from the specified input stream.
@@ -91,7 +94,7 @@ public:
         // Ensure that the stream is starting with the valid
         // list token, otherwise all subsequent actions will
         // make more damage.
-        if (__s.peek() != _Value::list_token) {
+        if (__s.peek() != basic_value_type::list_token) {
             throw type_error(
                 "bencode::list::load the specified stream does "
                 "not contain interpretable bencode list value\n");
@@ -102,7 +105,7 @@ public:
 
         // Decode the Bencode values one by one until the
         // end of the stream or the list token.
-        while (!__s.eof() && __s.peek() != _Value::end_token) {
+        while (!__s.eof() && __s.peek() != basic_value_type::end_token) {
             // Decode the value of the next list item.
             auto __value = make_value<CharT, IntT, Traits,
                 Allocator, ListContainer, DictContainer>(__s);
@@ -128,9 +131,17 @@ public:
     cend() const
     { return _M_container.cend(); }
 
+    value_ptr_type&
+    operator[](std::size_t __index)
+    { return _M_container.operator[](__index); }
+
     void
-    push_back(const _Value_Ptr& value)
+    push_back(const value_ptr_type& value)
     { _M_container.push_back(value); }
+
+private:
+    // The collections of the Bencode values.
+    container_type _M_container;
 };
 
 
