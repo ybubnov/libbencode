@@ -42,7 +42,7 @@ public:
 
     ~basic_string() { }
 
-    // Serialie the basic_string value to the specified output stream.
+    // Serialize the basic_string value to the specified output stream.
     void
     dump(std::basic_ostream<CharT, Traits> &__s) const
     { __s << _M_value.length() << basic_value_type::delimiter_token
@@ -122,6 +122,14 @@ public:
     operator
     string_type() const
     { return _M_value; }
+
+    bool
+    operator==(const basic_string& __s) const noexcept(true)
+    { return _M_value == __s._M_value; }
+
+    bool
+    operator==(const CharT* __c) const noexcept(true)
+    { return _M_value == __c; }
 
     friend std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& __s,

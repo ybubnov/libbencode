@@ -63,34 +63,27 @@ public:
     ~basic_value() { }
 };
 
-/**
- * @brief Template class basic_list.
- *
- * @tparam CharT         Type of character stream.
- * @tparam IntT          Type of produced integer values.
- * @tparam Traits        Traits for character type, defaults to
- *                       `std::char_traits<CharT>`.
- * @tparam Allocator
- * @tparam ListContainer
- * @tparam DictContainer
- */
-template
-< typename CharT
-, typename IntT = int64_t
-, typename Traits = std::char_traits<CharT>
-, template
-< typename T
-> class Allocator = std::allocator
-, template
-< typename T
-, typename... Args
-> class ListContainer = std::vector
-, template
-< typename Key
-, typename T
-, typename... Args
-> class DictContainer = std::map
-> class basic_list;
+
+#define __bencode_dict_template \
+      typename CharT = char \
+    , typename IntT = int64_t \
+    , typename Traits = std::char_traits<CharT> \
+    , template \
+    < typename T \
+    > class Allocator = std::allocator \
+    , template \
+    < typename Key \
+    , typename T \
+    , typename... Args \
+    > class DictContainer = std::map \
+    , template \
+    < typename T \
+    , typename... Args \
+    > class ListContainer = std::vector
+
+
+#define __bencode_dict_typenames \
+    CharT, IntT, Traits, Allocator, DictContainer, ListContainer
 
 
 /**
@@ -104,23 +97,72 @@ template
  * @tparam DictContainer
  * @tparam ListContainer
  */
-template
-< typename CharT
-, typename IntT = int64_t
-, typename Traits = std::char_traits<CharT>
-, template
-< typename T
-> class Allocator = std::allocator
-, template
-< typename Key
-, typename T
-, typename... Args
-> class DictContainer = std::map
-, template
-< typename T
-, typename... Args
-> class ListContainer = std::vector
-> class basic_dict;
+template<__bencode_dict_template> class basic_dict;
+
+
+// template<__bencode_dict_template>
+// std::shared_ptr<basic_dict<__bencode_dict_typenames>>
+// make_dict(std::intializer_list<
+//     std::pair<std::basic_string<CharT, Traits, Allocator>,
+//         basic_value<CharT, Traits>> __list)
+// {
+//     return nullptr;
+// }
+
+
+
+#define __bencode_list_template \
+      typename CharT = char \
+    , typename IntT = int64_t \
+    , typename Traits = std::char_traits<CharT> \
+    , template \
+    < typename T \
+    > class Allocator = std::allocator \
+    , template \
+    < typename T \
+    , typename... Args \
+    > class ListContainer = std::vector \
+    , template \
+    < typename Key \
+    , typename T \
+    , typename... Args \
+    > class DictContainer = std::map
+
+
+#define __bencode_list_typenames \
+    CharT, IntT, Traits, Allocator, ListContainer, DictContainer
+
+/**
+ * @brief Template class basic_list.
+ *
+ * @tparam CharT         Type of character stream.
+ * @tparam IntT          Type of produced integer values.
+ * @tparam Traits        Traits for character type, defaults to
+ *                       `std::char_traits<CharT>`.
+ * @tparam Allocator
+ * @tparam ListContainer
+ * @tparam DictContainer
+ */
+template<__bencode_list_template> class basic_list;
+
+
+template<__bencode_list_template>
+std::shared_ptr<basic_list<__bencode_list_typenames>>
+make_list(std::size_t __count)
+{
+    return std::shared_ptr<basic_list<
+        __bencode_list_typenames>>(__count);
+}
+
+
+#define __bencode_integer_template \
+      typename CharT = char \
+    , typename IntT = int64_t \
+    , typename Traits = std::char_traits<CharT>
+
+
+#define __bencode_integer_typenames \
+    CharT, IntT, Traits
 
 
 /**
@@ -131,12 +173,28 @@ template
  * @tparam Traits Traits for character type, defaults to
  *                `std::char_traits<CharT>`.
  */
-template
-< typename CharT
-, typename IntT = int64_t
-, typename Traits = std::char_traits<CharT>
-> class basic_integer;
+template<__bencode_integer_template> class basic_integer;
 
+
+template<__bencode_integer_template>
+std::shared_ptr<basic_integer<__bencode_integer_typenames>>
+make_integer(IntT __value)
+{
+    return std::make_shared<basic_integer<
+        __bencode_integer_typenames>>(__value);
+}
+
+
+#define __bencode_string_template \
+      typename CharT = char \
+    , typename Traits = std::char_traits<CharT> \
+    , template \
+    < typename T \
+    > class Allocator = std::allocator
+
+
+#define __bencode_string_typenames \
+    CharT, Traits, Allocator
 
 /**
  * @brief Template class basic_integer.
@@ -146,41 +204,35 @@ template
  *                   `std::char_traits<CharT>`.
  * @tparam Allocator
  */
-template
-< typename CharT
-, typename Traits = std::char_traits<CharT>
-, template
-< typename T
-> class Allocator = std::allocator
-> class basic_string;
+template<__bencode_string_template> class basic_string;
 
 
-template
-< typename CharT
-, typename IntT = int64_t
-, typename Traits = std::char_traits<CharT>
-, template
-< typename T
-> class Allocator = std::allocator
-, template
-< typename T
-, typename... Args
-> class ListContainer = std::vector
-, template
-< typename Key
-, typename T
-, typename... Args
-> class DictContainer = std::map
-> std::shared_ptr<basic_value<CharT, Traits>>
+template<__bencode_string_template>
+std::shared_ptr<basic_string<__bencode_string_typenames>>
+make_string(CharT* __chars)
+{
+    return std::shared_ptr<basic_string<
+        __bencode_string_typenames>>(__chars);
+}
+
+
+template<__bencode_dict_template>
+std::shared_ptr<basic_value<CharT, Traits>>
 make_value(std::basic_istream<CharT, Traits> &__s)
 {
     using basic_type = basic_value<CharT, Traits>;
-    using integer_type = basic_integer<CharT, IntT, Traits>;
-    using string_type = basic_string<CharT, Traits, Allocator>;
-    using list_type = basic_list<CharT, IntT, Traits,
-          Allocator, ListContainer, DictContainer>;
-    using dict_token = basic_dict<CharT, IntT, Traits,
-        Allocator, DictContainer, ListContainer>;
+
+    using integer_type = basic_integer<
+        __bencode_integer_typenames>;
+
+    using string_type = basic_string<
+        __bencode_string_typenames>;
+
+    using list_type = basic_list<
+        __bencode_list_typenames>;
+
+    using dict_type = basic_dict<
+        __bencode_dict_typenames>;
 
     std::shared_ptr<basic_type> __ptr;
 
@@ -193,7 +245,7 @@ make_value(std::basic_istream<CharT, Traits> &__s)
         __ptr = std::make_shared<list_type>();
         break;
     case basic_type::dict_token:
-        __ptr = std::make_shared<dict_token>();
+        __ptr = std::make_shared<dict_type>();
         break;
     default:
         __ptr = std::make_shared<string_type>();

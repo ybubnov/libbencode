@@ -86,6 +86,16 @@ public:
                 "`e` expected, but `" << CharT(*__result) << "` found\n";
             throw encoding_error(__error.str());
         }
+
+        // Validate that decoded value is an actual integer.
+        if (!_M_value && __i.str() != std::basic_string<
+                CharT, Traits>(1, CharT('0'))) {
+            std::ostringstream __error;
+
+            __error << "bencode::integer::load the specified "
+                "value is not a number\n";
+            throw value_error(__error.str());
+        }
     }
 
     operator
@@ -99,10 +109,6 @@ public:
     bool
     operator==(const value_type __i) const noexcept(true)
     { return _M_value == __i; }
-
-    bool
-    operator==(const int __i) const noexcept(true)
-    { return _M_value == (value_type) __i; }
 
     friend std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& __s,

@@ -24,6 +24,13 @@ type_error::type_error(const std::string& __s)
 type_error::~type_error() { }
 
 
+value_error::value_error(const std::string& __s)
+: exception(__s) { }
+
+
+value_error::~value_error() { }
+
+
 encoding_error::encoding_error(const std::string& __s)
 : exception(__s) { }
 
