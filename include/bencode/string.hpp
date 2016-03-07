@@ -77,20 +77,30 @@ public:
             std::ostringstream __error;
 
             __error << "bencode::string::load the delimiter `:` "
-                " expected, but `" << CharT(*__result) << "` found\n";
+                "expected, but `" << CharT(*__result) << "` found\n";
             throw encoding_error(__error.str());
         }
 
         // Save the length of the string.
-        long long __count;
+        int64_t __count;
         __i >> __count;
 
+        if (!__count && __i.str() != std::basic_string<
+                CharT, Traits>(1, CharT('0'))) {
+            std::ostringstream __error;
+
+            __error << "bencode::string::load the specified string "
+                "length is not a number\n";
+            throw value_error(__error.str());
+        }
+
+        // Ensure that the string length is a non-negative value.
         if (__count < 0) {
             std::ostringstream __error;
 
             __error << "bencode::string::load the length of the string "
-                "value must be a positive: `" << __count << "`\n";
-            throw encoding_error(__error.str());
+                "value must be a positive integer: `" << __count << "`\n";
+            throw value_error(__error.str());
         }
 
         // Allocate the list of symbols of the specified string length.
@@ -98,9 +108,21 @@ public:
 
         // Read the string value into the symbol list.
         __s.get(__str.get(), std::streamsize(__count+1));
+        auto __strval = string_type(__str.get());
+
+        // Ensure that valid count of the symbols was extracted from
+        // the provided input stream.
+        if (__strval.length() != __count) {
+            std::ostringstream __error;
+
+            __error << "bencode::string::load the specified string "
+                "decoded length is not equal to the real one: `" << __count
+                << "` != `" << __strval.length() << "`\n";
+            throw value_error(__error.str());
+        }
 
         // Initialize the internal value with a new string.
-        _M_value = string_type(__str.get());
+        _M_value = __strval;
     }
 
     iterator

@@ -60,7 +60,8 @@ public:
 
     // Free the resources occupied by the token.
     virtual
-    ~basic_value() { }
+    ~basic_value()
+    { }
 };
 
 
