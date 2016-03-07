@@ -4,7 +4,6 @@
 #include <sstream>
 #include <boost/test/unit_test.hpp>
 #include <bencode.hpp>
-#include <iostream>
 
 
 BOOST_AUTO_TEST_SUITE(TestString)
@@ -45,7 +44,7 @@ BOOST_AUTO_TEST_CASE(test_load_exceptions)
 
     BOOST_TEST_MESSAGE("--- Exception should be raised on "
         "invalid string length.");
-    std::stringstream ss2("inf:This should an infinite string");
+    std::stringstream ss2("inf:This should be an infinite string");
     bencode::string s2;
 
     BOOST_CHECK_EXCEPTION(s2.load(ss2), bencode::value_error,
@@ -83,6 +82,22 @@ BOOST_AUTO_TEST_CASE(test_load_exceptions)
         });
 }
 
+
+BOOST_AUTO_TEST_CASE(test_operators)
+{
+    BOOST_TEST_MESSAGE("--- Validate string comparison operators.");
+    bencode::string s1("The forward heat shield, or apex cover, is "
+        "made of brazed stainless steel honeycomb and covered with "
+        "ablative material.");
+
+    BOOST_CHECK(s1 == "The forward heat shield, or apex cover, is "
+        "made of brazed stainless steel honeycomb and covered with "
+        "ablative material.");
+
+    BOOST_CHECK(s1 == std::string("The forward heat shield, or apex "
+        "cover, is made of brazed stainless steel honeycomb and covered "
+        "with ablative material."));
+}
 
 
 BOOST_AUTO_TEST_CASE(test_dump)

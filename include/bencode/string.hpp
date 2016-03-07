@@ -20,7 +20,7 @@ template
 private:
     using basic_value_type = basic_value<CharT, Traits>;
 
-    using allocator_type = Allocator<basic_value_type>;
+    using allocator_type = Allocator<CharT>;
 
 public:
     using string_type = std::basic_string<CharT, Traits, allocator_type>;
@@ -29,18 +29,31 @@ public:
 
     using const_iterator = typename string_type::const_iterator;
 
-    basic_string() { }
+    basic_string()
+    { }
 
-    basic_string(const basic_string &__string)
-    : _M_value(__string._M_value) { }
+    basic_string(const basic_value_type& __value)
+    {
+        auto __string = dynamic_cast<
+            const basic_string&>(__value);
+
+        _M_value = __string._M_value;
+    }
+
+    basic_string(const basic_string& __string)
+    : _M_value(__string._M_value)
+    { }
 
     basic_string(const string_type& __s)
-    : _M_value(__s) { }
+    : _M_value(__s)
+    { }
 
     basic_string(const CharT *__chars)
-    : _M_value(__chars) { }
+    : _M_value(__chars)
+    { }
 
-    ~basic_string() { }
+    ~basic_string()
+    { }
 
     // Serialize the basic_string value to the specified output stream.
     void
@@ -150,8 +163,8 @@ public:
     { return _M_value == __s._M_value; }
 
     bool
-    operator==(const CharT* __c) const noexcept(true)
-    { return _M_value == __c; }
+    operator==(const string_type& __s)
+    { return _M_value == __s; }
 
     friend std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& __s,

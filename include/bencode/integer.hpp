@@ -23,13 +23,23 @@ private:
     using value_type = IntT;
 
 public:
+    basic_integer(const basic_value_type& __value)
+    {
+        auto __integer = dynamic_cast<
+            const basic_integer&>(__value);
+        _M_value = __integer._M_value;
+    }
+
     basic_integer(const basic_integer& __i)
-    : _M_value(__i._M_value) { }
+    : _M_value(__i._M_value)
+    { }
 
     basic_integer(value_type __i = 0)
-    : _M_value(__i) { }
+    : _M_value(__i)
+    { }
 
-    ~basic_integer() { }
+    ~basic_integer()
+    { }
 
     // Serialize the integer value to the specified output stream.
     void
