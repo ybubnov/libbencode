@@ -35,6 +35,7 @@ private:
     // Define the dict value alias.
     using basic_value_type = basic_value<CharT, Traits>;
 
+    // Define the shared pointer type of basic values.
     using value_ptr_type = std::shared_ptr<basic_value_type>;
 
     // Define the key-value pair for the dict container.
