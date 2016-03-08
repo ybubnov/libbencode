@@ -48,7 +48,7 @@ public:
     : _M_value(__s)
     { }
 
-    basic_string(const CharT *__chars)
+    basic_string(const CharT* __chars)
     : _M_value(__chars)
     { }
 

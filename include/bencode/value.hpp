@@ -198,7 +198,7 @@ make_integer(IntT __value)
     CharT, Traits, Allocator
 
 /**
- * @brief Template class basic_integer.
+ * @brief Template class basic_string.
  *
  * @tparam CharT     Type of character stream.
  * @tparam Traits    Traits for character type, defaults to
@@ -210,10 +210,10 @@ template<__bencode_string_template> class basic_string;
 
 template<__bencode_string_template>
 std::shared_ptr<basic_string<__bencode_string_typenames>>
-make_string(CharT* __chars)
+make_string(const CharT* __value)
 {
-    return std::shared_ptr<basic_string<
-        __bencode_string_typenames>>(__chars);
+    return std::make_shared<basic_string<
+        __bencode_string_typenames>>(__value);
 }
 
 

@@ -11,7 +11,8 @@ BOOST_AUTO_TEST_SUITE(TestInteger)
 
 BOOST_AUTO_TEST_CASE(test_load)
 {
-    BOOST_TEST_MESSAGE("--- Char integer value should be decoded.");
+    BOOST_TEST_MESSAGE("--- Integer value should be decoded "
+        "from the byte characters.");
     std::stringstream ss1("i291346e");
     bencode::integer i1;
 
@@ -35,7 +36,8 @@ BOOST_AUTO_TEST_CASE(test_load)
     BOOST_CHECK(i3 == int64_t(-1657324813743));
 
 
-    BOOST_TEST_MESSAGE("--- WChar integer value should be decoded. ");
+    BOOST_TEST_MESSAGE("--- Integer value should be decoded "
+        "from the wide characters.");
     std::wstringstream ss4(L"i1864795134e");
     bencode::winteger i4;
 
@@ -101,7 +103,8 @@ BOOST_AUTO_TEST_CASE(test_load_exceptions)
 
 BOOST_AUTO_TEST_CASE(test_dump)
 {
-    BOOST_TEST_MESSAGE("--- Integer value should be encoded into Char.");
+    BOOST_TEST_MESSAGE("--- Integer value should be encoded "
+        "into the byte characters.");
     std::stringstream ss1;
     bencode::integer i1(64234973249);
 
@@ -109,7 +112,8 @@ BOOST_AUTO_TEST_CASE(test_dump)
     BOOST_CHECK(ss1.str() == "i64234973249e");
 
 
-    BOOST_TEST_MESSAGE("--- Integer values should be encoded into WChar.");
+    BOOST_TEST_MESSAGE("--- Integer values should be encoded "
+        "into the wide characters.");
     std::wstringstream ss2;
     bencode::winteger i2(16756911);
 

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <sstream>
 #include <initializer_list>
 #include <bencode/value.hpp>
 
@@ -111,7 +112,22 @@ public:
 
             // Append the decoded item to the list.
             _M_container.push_back(__value);
+
+            // Force read the next symbol from the stream.
+            __s.peek();
         }
+
+        // Ensure that the list value is succefully de-serialized.
+        if (__s.peek() != basic_value_type::end_token) {
+            std::ostringstream __error;
+
+            __error << "bencode::list::load the end of the list "
+                "`e` expected, but `" << CharT(__s.peek()) << "` found\n";
+            throw encoding_error(__error.str());
+        }
+
+        // Read the "e" symbol from the provided stream.
+        __s.get();
     }
 
     iterator
@@ -135,8 +151,8 @@ public:
     { return _M_container.operator[](__index); }
 
     void
-    push_back(const value_ptr_type& value)
-    { _M_container.push_back(value); }
+    push_back(const value_ptr_type& __value)
+    { _M_container.push_back(__value); }
 
 private:
     // The collections of the Bencode values.

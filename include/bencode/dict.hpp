@@ -149,6 +149,9 @@ public:
 
             // Insert a new element into the dictionary.
             _M_container.insert(value_type(__key, __value));
+
+            // Force read the next symbols from the input stream.
+            __s.peek();
         }
 
         // Ensure that all those operations where not performed
@@ -161,6 +164,9 @@ public:
                 "`e` expected, but `" << CharT(__s.peek()) << "` found\n";
             throw encoding_error(__error.str());
         }
+
+        // Read the "e" symbol from the input stream.
+        __s.get();
     }
 
     void
