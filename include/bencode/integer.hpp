@@ -30,6 +30,10 @@ public:
         _M_value = __integer._M_value;
     }
 
+    basic_integer(const std::shared_ptr<basic_value_type>& __ptr)
+    : basic_integer(*__ptr)
+    { }
+
     basic_integer(const basic_integer& __i)
     : _M_value(__i._M_value)
     { }

@@ -17,11 +17,8 @@ BOOST_AUTO_TEST_CASE(test_load)
     bencode::list l1;
 
     l1.load(ss1);
-    auto first = l1[0];
-    auto second = l1[1];
-
-    BOOST_CHECK(bencode::integer(*first) == int64_t(4687327));
-    BOOST_CHECK(bencode::string(*second) == "internationalization");
+    BOOST_CHECK(bencode::integer(l1[0]) == int64_t(4687327));
+    BOOST_CHECK(bencode::string(l1[1]) == "internationalization");
 }
 
 

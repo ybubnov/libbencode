@@ -6,6 +6,7 @@
 #include <sstream>
 #include <initializer_list>
 #include <bencode/value.hpp>
+#include <iostream>
 
 
 namespace bencode
@@ -53,6 +54,17 @@ public:
     using const_iterator = typename container_type::const_iterator;
 
     basic_list()
+    { }
+
+    basic_list(const basic_value_type& __value)
+    {
+        auto __list = dynamic_cast<const basic_list&>(__value);
+        // explicirly copy the containers content.
+        _M_container = container_type(__list._M_container);
+    }
+
+    basic_list(const std::shared_ptr<basic_value_type&> __ptr)
+    : basic_list(*__ptr)
     { }
 
     basic_list(std::size_t __count)

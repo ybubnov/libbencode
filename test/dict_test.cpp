@@ -17,11 +17,8 @@ BOOST_AUTO_TEST_CASE(test_load)
     bencode::dict d1;
 
     d1.load(ss1);
-    auto first = d1["first"];
-    auto second = d1["second"];
-
-    BOOST_CHECK(bencode::integer(*first) == int64_t(-4987357));
-    BOOST_CHECK(bencode::string(*second) == "homotopy");
+    BOOST_CHECK(bencode::integer(d1["first"]) == int64_t(-4987357));
+    BOOST_CHECK(bencode::string(d1["second"]) == "homotopy");
 
 
     BOOST_TEST_MESSAGE("--- Dictionary value should be decoded "
@@ -30,11 +27,8 @@ BOOST_AUTO_TEST_CASE(test_load)
     bencode::wdict d2;
 
     d2.load(ss2);
-    auto kind = d2[L"kind"];
-    auto count = d2[L"count"];
-
-    BOOST_CHECK(bencode::wstring(*kind) == L"Switch-Router");
-    BOOST_CHECK(bencode::winteger(*count) == int64_t(6573));
+    BOOST_CHECK(bencode::wstring(d2[L"kind"]) == L"Switch-Router");
+    BOOST_CHECK(bencode::winteger(d2[L"count"]) == int64_t(6573));
 }
 
 

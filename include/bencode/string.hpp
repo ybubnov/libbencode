@@ -40,6 +40,10 @@ public:
         _M_value = __string._M_value;
     }
 
+    basic_string(const std::shared_ptr<basic_value_type>& __ptr)
+    : basic_string(*__ptr)
+    { }
+
     basic_string(const basic_string& __string)
     : _M_value(__string._M_value)
     { }

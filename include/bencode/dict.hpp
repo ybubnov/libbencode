@@ -78,12 +78,25 @@ public:
     // equivalent to the container mutable iterator.
     using const_iterator = typename container_type::const_iterator;
 
-    basic_dict() { }
+    basic_dict()
+    { }
+
+    basic_dict(const basic_value_type& __value)
+    {
+        auto __dict = dynamic_cast<const basic_dict&>(__value);
+        _M_container = container_type(__dict._M_container);
+    }
+
+    basic_dict(const std::shared_ptr<basic_value_type>& __ptr)
+    : basic_dict(*__ptr)
+    { }
 
     basic_dict(std::initializer_list<value_type> __list)
-    : _M_container(__list.begin(), __list.end()) { }
+    : _M_container(__list.begin(), __list.end())
+    { }
 
-    ~basic_dict() { }
+    ~basic_dict()
+    { }
 
     // Serialize the dictionary value to the specified output stream.
     void

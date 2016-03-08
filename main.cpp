@@ -4,33 +4,18 @@
 #include <bencode.hpp>
 #include <bencode/istream.hpp>
 #include <bencode/ostream.hpp>
+#include <bencode/utility.hpp>
 
+
+using namespace bencode;
 
 
 int main(int argc, char **argv)
 {
-    bencode::ostream bs(std::cout.rdbuf());
+    ostream bs(std::cout.rdbuf());
 
-    std::stringstream s1("d5:first:i12345e6:second:5:helloe");
-    bencode::istream bi1(s1.rdbuf());
-    bencode::dict d1;
-
-    bi1 >> d1;
-    //bs << d1;
-
-    std::stringstream s2("l5:firsti12345e6:second5:helloe");
-    bencode::istream bi2(s2.rdbuf());
-    bencode::list l1;
-
-    bi2 >> l1;
-    //bs << l1;
-
-    d1["value"] = bencode::make_integer(666);
-    bs << *d1["value"];
-
-    bencode::list l2(2);
-    l2[0] = bencode::make_integer(777);
-    bs << l2;
+    auto bint = "i666e"_bencode;
+    bs << *bint;
 
     return 0;
 }
