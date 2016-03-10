@@ -17,13 +17,13 @@ namespace bencode
 
 
 /**
- * @brief Template class basic_value.
+ *  @brief Template class basic_value.
  *
- * @tparam CharT  Type of character stream.
- * @tparam Traits Traits for character type, defaults to
- *                `std::char_traits<CharT>`.
+ *  @tparam CharT   Character type, defaults to `char`.
+ *  @tparam Traits  Traits for character type, defaults to
+ *                  `std::char_traits<CharT>`.
  *
- * This is the base class for all bencode values.
+ *  This is the base class for all bencode values.
  */
 template
 < typename CharT = char
@@ -50,21 +50,29 @@ public:
     // end of the token was not reached we should throw a error.
     static const auto integer_length = 20;
 
-    // Serialize the token to the specified output stream.
+    /**
+     *  @brief Serialize the token to the specified output stream.
+     */
     virtual void
-    dump(std::basic_ostream<CharT, Traits> &__s) const = 0;
+    dump(std::basic_ostream<CharT, Traits>& __s) const = 0;
 
-    // Deserialize the token from the specified input stream.
+    /**
+     *  @brief Deserialize the token from the specified input stream.
+     */
     virtual void
-    load(std::basic_istream<CharT, Traits> &__s) = 0;
+    load(std::basic_istream<CharT, Traits>& __s) = 0;
 
-    // Free the resources occupied by the token.
+    /**
+     *  @brief Free the resources occupied by the value.
+     */
     virtual
     ~basic_value()
     { }
 };
 
 
+// Define integer template typenames used in within class and
+// function definitions.
 #define __bencode_integer_template \
       typename CharT = char \
     , typename IntT = int64_t \
@@ -76,16 +84,29 @@ public:
 
 
 /**
- * @brief Template class basic_integer.
+ *  @brief Template class basic_integer.
  *
- * @tparam CharT  Type of character stream.
- * @tparam IntT   Type of produced integer values.
- * @tparam Traits Traits for character type, defaults to
- *                `std::char_traits<CharT>`.
+ *  @tparam CharT   Character type, defaults to `char`.
+ *  @tparam IntT    Integer type, defaults to `int64_t`.
+ *  @tparam Traits  Traits for character type, defaults to
+ *                  `std::char_traits<CharT>`.
  */
 template<__bencode_integer_template> class basic_integer;
 
 
+/**
+ *  @brief Create an integer shared pointer.
+ *
+ *  @tparam CharT   Character type, defaults to `char`.
+ *  @tparam IntT    Integer type, defaults to `int64_t`.
+ *  @tparam Traits  Traits for character type, defaults to
+ *                  `std::char_traits<CharT>`.
+ *
+ *  @param __value  Integer value.
+ *
+ *  Returns a shared pointer to the integer type initialized using
+ *  a provided value.
+ */
 template<__bencode_integer_template>
 std::shared_ptr<basic_integer<__bencode_integer_typenames>>
 make_integer(IntT __value)
@@ -95,6 +116,8 @@ make_integer(IntT __value)
 }
 
 
+// Define string template typenames used in the class and
+// function definitions.
 #define __bencode_string_template \
       typename CharT = char \
     , typename Traits = std::char_traits<CharT> \
@@ -107,16 +130,29 @@ make_integer(IntT __value)
     CharT, Traits, Allocator
 
 /**
- * @brief Template class basic_string.
+ *  @brief Template class basic_string.
  *
- * @tparam CharT     Type of character stream.
- * @tparam Traits    Traits for character type, defaults to
- *                   `std::char_traits<CharT>`.
- * @tparam Allocator
+ *  @tparam CharT      Character type.
+ *  @tparam Traits     Traits for character type, defaults to
+ *                     `std::char_traits<CharT>`.
+ *  @tparam Allocator  Allocator type, defaults to `std::allocator<CharT>`.
  */
 template<__bencode_string_template> class basic_string;
 
 
+/**
+ *  @brief Create a sting shared pointer.
+ *
+ *  @tparam CharT      Character type.
+ *  @tparam Traits     Traits for character type, defaults to
+ *                     `std::char_traits<CharT>`.
+ *  @tparam Allocator  Allocator type, defaults to `std::allocator<CharT>`.
+ *
+ *  @param __value  Character string.
+ *
+ *  Returns a shared pointer to the string initialized using the provided
+ *  character string.
+ */
 template<__bencode_string_template>
 std::shared_ptr<basic_string<__bencode_string_typenames>>
 make_string(const CharT* __value)
@@ -126,6 +162,8 @@ make_string(const CharT* __value)
 }
 
 
+// Define dictionary template typenames used in the class and
+// function definitions.
 #define __bencode_dict_template \
       typename CharT = char \
     , typename IntT = int64_t \
@@ -149,19 +187,38 @@ make_string(const CharT* __value)
 
 
 /**
- * @brief Template class basic_dict.
+ *  @brief Template class basic_dict.
  *
- * @tparam CharT         Type of character stream.
- * @tparam IntT          Type of produced integer values.
- * @tparam Traits        Traits for character type, defaults to
- *                       `std::char_traits<CharT>`.
- * @tparam Allocator
- * @tparam DictContainer
- * @tparam ListContainer
+ *  @tparam CharT          Character type, defaults to `char`.
+ *  @tparam IntT           Integer type, defaults to `int64_t`.
+ *  @tparam Traits         Traits for character type, defaults to
+ *                         `std::char_traits<CharT>`.
+ *  @tparam Allocator      Allocator type, defaults to `std::allocator`.
+ *  @tparam DictContainer  Dictionary type, defaults to `std::map`.
+ *  @tparam ListContainer  List type, defaults to `std::vector`.
+ *
+ *  Define the type of associative array, which is storing the mapping
+ *  of string keys to the bencode values.
  */
 template<__bencode_dict_template> class basic_dict;
 
 
+/**
+ *  @brief Create a dictionary shared pointer.
+ *
+ *  @tparam CharT          Character type, defaults to `char`.
+ *  @tparam IntT           Integer type, defaults to `int64_t`.
+ *  @tparam Traits         Traits for character type, defaults to
+ *                         `std::char_traits<CharT>`.
+ *  @tparam Allocator      Allocator type, defaults to `std::allocator`.
+ *  @tparam DictContainer  Dictionary type, defaults to `std::map`.
+ *  @tparam ListContainer  List type, defaults to `std::vector`.
+ *
+ *  @param __list  Dictionary initializer list.
+ *
+ *  Returns a shared pointer to the dictionary type initialized with
+ *  the pairs specified in the initializer list.
+ */
 template<__bencode_dict_template>
 std::shared_ptr<basic_dict<__bencode_dict_typenames>>
 make_dict(std::initializer_list<
@@ -173,6 +230,8 @@ make_dict(std::initializer_list<
 }
 
 
+// Define list template typenames used in the class and
+// function definitions.
 #define __bencode_list_template \
       typename CharT = char \
     , typename IntT = int64_t \
@@ -195,19 +254,38 @@ make_dict(std::initializer_list<
     CharT, IntT, Traits, Allocator, ListContainer, DictContainer
 
 /**
- * @brief Template class basic_list.
+ *  @brief Template class basic_list.
  *
- * @tparam CharT         Type of character stream.
- * @tparam IntT          Type of produced integer values.
- * @tparam Traits        Traits for character type, defaults to
- *                       `std::char_traits<CharT>`.
- * @tparam Allocator
- * @tparam ListContainer
- * @tparam DictContainer
+ *  @tparam CharT          Character type, defaults to `char`.
+ *  @tparam IntT           Integer type, defaults to `int64_t`.
+ *  @tparam Traits         Traits for character type, defaults to
+ *                         `std::char_traits<CharT>`.
+ *  @tparam Allocator      Allocator type, defaults to `std::allocator`.
+ *  @tparam ListContainer  List type, defaults to `std::vector`.
+ *  @tparam DictContainer  Dictionary type, defaults to `std::map`.
+ *
+ *  Define the type of array, which is storing the list of bencode
+ *  values.
  */
 template<__bencode_list_template> class basic_list;
 
 
+/**
+ *  @brief Create a list shared pointer.
+ *
+ *  @tparam CharT          Character type, defaults to `char`.
+ *  @tparam IntT           Integer type, defaults to `int64_t`.
+ *  @tparam Traits         Traits for character type, defaults to
+ *                         `std::char_traits<CharT>`.
+ *  @tparam Allocator      Allocator type, defaults to `std::allocator`.
+ *  @tparam ListContainer  List type, defaults to `std::vector`.
+ *  @tparam DictContainer  Dictionary type, defaults to `std::map`.
+ *
+ *  @param __count  Count of elements to allocate.
+ *
+ *  Returns a shared pointer to the list type with specified count
+ *  of pre-allocated elements.
+ */
 template<__bencode_list_template>
 std::shared_ptr<basic_list<__bencode_list_typenames>>
 make_list(std::size_t __count)
@@ -217,26 +295,39 @@ make_list(std::size_t __count)
 }
 
 
+/**
+ *  @brief Parse bencoded value.
+ *
+ *  @tparam CharT          Character type, defaults to `char`.
+ *  @tparam IntT           Integer type, defaults to `int64_t`.
+ *  @tparam Traits         Traits for character type, defaults to
+ *                         `std::char_traits<CharT>`.
+ *  @tparam Allocator      Allocator type, defaults to `std::allocator`.
+ *  @tparam ListContainer  List type, defaults to `std::vector`.
+ *  @tparam DictContainer  Dictionary type, defaults to `std::map`.
+ *
+ *  @param __s  Input stream.
+ *
+ *  Returns a shared pointer of the base value class. The pointer is
+ *  storing the decoded value from the provided input stream. The target
+ *  type is selected based on the first character of the input stream.
+ */
 template<__bencode_dict_template>
 std::shared_ptr<basic_value<CharT, Traits>>
 make_value(std::basic_istream<CharT, Traits> &__s)
 {
     using basic_type = basic_value<CharT, Traits>;
 
-    using integer_type = basic_integer<
-        __bencode_integer_typenames>;
-
-    using string_type = basic_string<
-        __bencode_string_typenames>;
-
-    using list_type = basic_list<
-        __bencode_list_typenames>;
-
-    using dict_type = basic_dict<
-        __bencode_dict_typenames>;
+    // Define a bunch of aliases with template arguments.
+    using integer_type = basic_integer<__bencode_integer_typenames>;
+    using string_type = basic_string<__bencode_string_typenames>;
+    using list_type = basic_list<__bencode_list_typenames>;
+    using dict_type = basic_dict<__bencode_dict_typenames>;
 
     std::shared_ptr<basic_type> __ptr;
 
+    // Based on the first character in the provided input stream,
+    // select the target parser type.
     switch (__s.peek())
     {
     case basic_type::integer_token:
