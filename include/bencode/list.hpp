@@ -38,52 +38,83 @@ private:
     using value_ptr_type = std::shared_ptr<basic_value_type>;
 
 public:
-    // Define the list container allocator for the values.
+    /**
+     *  @brief List container allocator for the values.
+     */
     using allocator_type = Allocator<value_ptr_type>;
 
-    // Define the list container type to keep the collection
-    // of the Bencode values.
+    /**
+     *  @brief List container type of the shared pointers to bencode values.
+     */
     using container_type = ListContainer<value_ptr_type, allocator_type>;
 
-    // Define the list iterator as a functional
-    // equivalent to the container iterator.
+    /**
+     *  @brief Mutable elements iterator.
+     */
     using iterator = typename container_type::iterator;
 
-    // Define the list constant iterator as a functional
-    // equivalent to the container iterator.
+    /**
+     *  @brief Immutable (constant) elements iterator.
+     */
     using const_iterator = typename container_type::const_iterator;
 
+    /**
+     *  @brief Construct an empty list.
+     */
     basic_list()
     { }
 
+    /**
+     *  @brief Construct a list using downcasted reference to the basic type.
+     *  @param __value  Reference to the basic type.
+     */
     basic_list(const basic_value_type& __value)
     {
         auto __list = dynamic_cast<const basic_list&>(__value);
-        // explicirly copy the containers content.
+        // Explicitly copy the containers content.
         _M_container = container_type(__list._M_container);
     }
 
+    /**
+     *  @brief Construct a list using downcasted pointer to the basic type.
+     *  @param __ptr  Shared pointer to the basic type.
+     */
     basic_list(const std::shared_ptr<basic_value_type&> __ptr)
     : basic_list(*__ptr)
     { }
 
+    /**
+     *  @brief Construct a list with pre-allocated count of elements.
+     *  @param __count  Count to elements to allocate.
+     */
     basic_list(std::size_t __count)
     :_M_container(__count)
     { }
 
-    // Create a new list value from the initializer list.
-    basic_list(std::initializer_list<value_ptr_type> l)
-    : _M_container(l)
+    /**
+     *  @brief Construct a list using the initializer list.
+     *  @param __list  List of elements.
+     */
+    basic_list(std::initializer_list<value_ptr_type> __list)
+    : _M_container(__list)
     { }
 
-    basic_list(const_iterator cbegin, const_iterator cend)
-    : _M_container(cbegin, cend)
+    /**
+     *  @brief Construct a list from the range.
+     *  @param __first  First element of the range.
+     *  @param __last   Last element of the range.
+     */
+    basic_list(const_iterator __first, const_iterator __last)
+    : _M_container(__first, __last)
     { }
 
     ~basic_list()
     { }
 
-    // Serialize the list value to the specified output stream.
+    /**
+     *  @brief Serialize the list value to the specified output stream.
+     *  @param __s  Reference to the output stream.
+     */
     void
     dump(std::basic_ostream<CharT, Traits>& __s) const
     {
@@ -100,7 +131,10 @@ public:
         __s << basic_value_type::end_token;
     }
 
-    // Deserialize the list value from the specified input stream.
+    /**
+     *  @brief Deserialize the list value from the specified input stream.
+     *  @param __s  Reference to the input stream.
+     */
     void
     load(std::basic_istream<CharT, Traits>& __s)
     {
@@ -142,29 +176,74 @@ public:
         __s.get();
     }
 
+    /**
+     *  @brief Iterator to the first element.
+     *
+     *  Returns read/write iterator that points to the first element in
+     *  the %list.
+     */
     iterator
     begin()
     { return _M_container.begin(); }
 
+    /**
+     *  @brief Iterator one past the last element.
+     *
+     *  Returs read-write iterator that points on past the last element
+     *  in the %list.
+     */
     iterator
     end()
     { return _M_container.end(); }
 
+    /**
+     *  @brief Constant iterator to the first element.
+     *
+     *  Returns read-only iterator that points to the first element in
+     *  the %list.
+     */
     const_iterator
     cbegin() const
     { return _M_container.cbegin(); }
 
+    /**
+     *  @brief Constant iterator to one past the last element.
+     *
+     *  Returns read-only iterator that points to one past the last
+     *  element in the %list.
+     */
     const_iterator
     cend() const
     { return _M_container.cend(); }
 
+    /**
+     *  @brief Subscript access to the data container in the %list.
+     *  @param __index  The index of the element for which data should be
+     *                  accessed.
+     *  @return  Read/write reference to data.
+     */
     value_ptr_type&
     operator[](std::size_t __index)
     { return _M_container.operator[](__index); }
 
+    /**
+     *  @brief Add data to the end of the %list.
+     *  @param __value  Data to be added.
+     *
+     *  Push the provided element to the end of the list container.
+     */
     void
     push_back(const value_ptr_type& __value)
     { _M_container.push_back(__value); }
+
+    /**
+     *  @brief Removes last element.
+     *
+     *  Shrink the %list by one.
+     */
+    void
+    pop_back()
+    { _M_container.pop_back(); }
 
 private:
     // The collections of the Bencode values.

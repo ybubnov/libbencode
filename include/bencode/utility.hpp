@@ -14,6 +14,13 @@ inline namespace literals
 {
 
 
+/**
+ *  @brief User-defined bencode string literal.
+ *  @param __str  Bencoded string value.
+ *
+ *  Returns the shared pointer to the basic bencode value, that
+ *  is constructed by parsing the provided string.
+ */
 std::shared_ptr<basic_value<char>>
 inline operator"" _bencode(const char* __str, std::size_t)
 {
@@ -22,6 +29,13 @@ inline operator"" _bencode(const char* __str, std::size_t)
 }
 
 
+/**
+ *  @brief User-defined bencode string literal.
+ *  @param __str  Bencoded string value.
+ *
+ *  Returns the shared pointer to the basic bencode value, that
+ *  is constructed by parsing the provided string.
+ */
 std::shared_ptr<basic_value<wchar_t>>
 inline operator"" _bencode(const wchar_t* __str, std::size_t)
 {
@@ -30,6 +44,13 @@ inline operator"" _bencode(const wchar_t* __str, std::size_t)
 }
 
 
+/**
+ *  @brief User-defined bencode string literal.
+ *  @param __str  Bencoded string value.
+ *
+ *  Returns the shared pointer to the basic bencode value, that
+ *  is constructed by parsing the provided string.
+ */
 std::shared_ptr<basic_value<char16_t>>
 inline operator"" _bencode(const char16_t* __str, std::size_t)
 {
@@ -38,6 +59,13 @@ inline operator"" _bencode(const char16_t* __str, std::size_t)
 }
 
 
+/**
+ *  @brief User-defined bencode string literal.
+ *  @param __str  Bencoded string value.
+ *
+ *  Returns the shared pointer to the basic bencode value, that
+ *  is constructed by parsing the provided string.
+ */
 std::shared_ptr<basic_value<char32_t>>
 inline operator"" _bencode(const char32_t* __str, std::size_t)
 {

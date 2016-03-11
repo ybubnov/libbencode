@@ -23,8 +23,14 @@ private:
     using allocator_type = Allocator<CharT>;
 
 public:
+    /**
+     *  @brief Internal string type.
+     */
     using string_type = std::basic_string<CharT, Traits, allocator_type>;
 
+    /**
+     *
+     */
     using size_type = typename string_type::size_type;
 
     using iterator = typename string_type::iterator;
@@ -83,7 +89,7 @@ public:
     { }
 
     /**
-     *  @brief Serialize the basic_string value to the specified output stream.
+     *  @brief Serialize the string value to the specified output stream.
      *  @param __s  Reference to the output stream.
      */
     void
@@ -92,7 +98,7 @@ public:
         << _M_value; }
 
     /**
-     *  @brief Deserialize the basic_string value from the specified input stream.
+     *  @brief Deserialize the string value from the specified input stream.
      *  @param __s  Reference to the input stream.
      */
     void

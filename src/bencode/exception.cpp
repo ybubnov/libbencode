@@ -22,14 +22,17 @@ exception::what() const noexcept (true)
 
 // Construct a new instance of the type exception.
 type_error::type_error(const std::string& __s)
-: exception(__s) { }
+: exception(__s)
+{ }
 
 
 // Construct a new instance of the value exception.
 value_error::value_error(const std::string& __s)
-: exception(__s) { }
+: exception(__s)
+{ }
 
 
 // Construct a new instance of the encoding exception.
 encoding_error::encoding_error(const std::string& __s)
-: exception(__s) { }
+: exception(__s)
+{ }
