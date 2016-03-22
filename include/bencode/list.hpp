@@ -6,7 +6,6 @@
 #include <sstream>
 #include <initializer_list>
 #include <bencode/value.hpp>
-#include <iostream>
 
 
 namespace bencode
