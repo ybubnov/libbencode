@@ -8,6 +8,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 #include <bencode/exception.hpp>
 
@@ -102,17 +103,17 @@ template<__bencode_integer_template> class basic_integer;
  *  @tparam Traits  Traits for character type, defaults to
  *                  `std::char_traits<CharT>`.
  *
- *  @param __value  Integer value.
+ *  @param __args  Arguments for integer constructor.
  *
  *  Returns a shared pointer to the integer type initialized using
  *  a provided value.
  */
-template<__bencode_integer_template>
+template<__bencode_integer_template, typename ...Args>
 std::shared_ptr<basic_integer<__bencode_integer_typenames>>
-make_integer(IntT __value)
+make_integer(Args&&... __args)
 {
     return std::make_shared<basic_integer<
-        __bencode_integer_typenames>>(__value);
+        __bencode_integer_typenames>>(std::forward<Args>(__args)...);
 }
 
 
@@ -148,17 +149,16 @@ template<__bencode_string_template> class basic_string;
  *                     `std::char_traits<CharT>`.
  *  @tparam Allocator  Allocator type, defaults to `std::allocator<CharT>`.
  *
- *  @param __value  Character string.
+ *  @param __args  Arguments for string constructor.
  *
- *  Returns a shared pointer to the string initialized using the provided
- *  character string.
+ *  Returns a shared pointer to the string.
  */
-template<__bencode_string_template>
+template<__bencode_string_template, typename ...Args>
 std::shared_ptr<basic_string<__bencode_string_typenames>>
-make_string(const CharT* __value)
+make_string(Args&&... __args)
 {
     return std::make_shared<basic_string<
-        __bencode_string_typenames>>(__value);
+        __bencode_string_typenames>>(std::forward<Args>(__args)...);
 }
 
 
@@ -216,17 +216,14 @@ template<__bencode_dict_template> class basic_dict;
  *
  *  @param __list  Dictionary initializer list.
  *
- *  Returns a shared pointer to the dictionary type initialized with
- *  the pairs specified in the initializer list.
+ *  Returns a shared pointer to the dictionary type.
  */
-template<__bencode_dict_template>
+template<__bencode_dict_template, typename ...Args>
 std::shared_ptr<basic_dict<__bencode_dict_typenames>>
-make_dict(std::initializer_list<
-    std::pair<basic_string<__bencode_string_typenames>,
-        std::shared_ptr<basic_value<CharT, Traits>>>> __list)
+make_dict(Args&&... __args)
 {
     return std::make_shared<basic_dict<
-        __bencode_dict_typenames>>(__list);
+        __bencode_dict_typenames>>(std::forward<Args>(__args)...);
 }
 
 
@@ -281,17 +278,16 @@ template<__bencode_list_template> class basic_list;
  *  @tparam ListContainer  List type, defaults to `std::vector`.
  *  @tparam DictContainer  Dictionary type, defaults to `std::map`.
  *
- *  @param __count  Count of elements to allocate.
+ *  @param __args  Arguments for the list constructor.
  *
- *  Returns a shared pointer to the list type with specified count
- *  of pre-allocated elements.
+ *  Returns a shared pointer to the list type.
  */
-template<__bencode_list_template>
+template<__bencode_list_template, typename ...Args>
 std::shared_ptr<basic_list<__bencode_list_typenames>>
-make_list(std::size_t __count)
+make_list(Args&&... __args)
 {
     return std::shared_ptr<basic_list<
-        __bencode_list_typenames>>(__count);
+        __bencode_list_typenames>>(std::forward<Args>(__args)...);
 }
 
 
