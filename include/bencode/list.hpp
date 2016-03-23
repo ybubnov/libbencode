@@ -48,6 +48,11 @@ public:
     using container_type = ListContainer<value_ptr_type, allocator_type>;
 
     /**
+     *  @brief Unsigned integral type of the dictionary size.
+     */
+    using size_type = typename container_type::size_type;
+
+    /**
      *  @brief Mutable elements iterator.
      */
     using iterator = typename container_type::iterator;
@@ -77,6 +82,8 @@ public:
     /**
      *  @brief Construct a list using downcasted pointer to the basic type.
      *  @param __ptr  Shared pointer to the basic type.
+     *
+     *  The pointer should not be equal to `nullptr`, it will not be checked.
      */
     basic_list(const std::shared_ptr<basic_value_type&> __ptr)
     : basic_list(*__ptr)
@@ -178,7 +185,7 @@ public:
     /**
      *  @brief Iterator to the first element.
      *
-     *  Returns read/write iterator that points to the first element in
+     *  Returns read-write iterator that points to the first element in
      *  the %list.
      */
     iterator
@@ -231,18 +238,53 @@ public:
      *
      *  Push the provided element to the end of the list container.
      */
-    void
-    push_back(const value_ptr_type& __value)
-    { _M_container.push_back(__value); }
+    iterator
+    insert(const value_ptr_type& __value)
+    { return _M_container.insert(_M_container.end(), __value); }
 
     /**
-     *  @brief Removes last element.
-     *
-     *  Shrink the %list by one.
+     *  @brief Inserts elements at the specified location in the container.
+     *  @param __pos    Mutable iterator before which the content will be
+     *                  inserted.
+     *  @param __value  Element value to insert.
      */
-    void
-    pop_back()
-    { _M_container.pop_back(); }
+    iterator
+    insert(iterator __pos, const value_ptr_type& __value)
+    { return _M_container.insert(__pos, __value); }
+
+
+    /**
+     *  @brief Inserts elements at the specified location in the container.
+     *  @param __pos    Immutable iterator before which the content will be
+     *                  inserted.
+     *  @param __value  Element value to insert.
+     */
+    iterator
+    insert(const_iterator __pos, const value_ptr_type& __value)
+    { return _M_container.insert(__pos, __value); }
+
+    /**
+     *  @brief Removes the specified element from the container.
+     *  @param __pos  Mutable iterator to the element to remove.
+     */
+    iterator
+    erase(iterator __pos)
+    { return _M_container.erase(__pos); }
+
+    /**
+     *  @brief Removes the specified element from the container.
+     *  @param __pos  Immutable iterator to the element to remove.
+     */
+    iterator
+    erase(const_iterator __pos)
+    { return _M_container.erase(__pos); }
+
+    /**
+     *  @brief Returns the number of elements in the container.
+     */
+    size_type
+    size()
+    { return _M_container.size(); }
 
 private:
     // The collections of the Bencode values.

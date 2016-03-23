@@ -58,8 +58,8 @@ BOOST_AUTO_TEST_CASE(test_dump)
     std::stringstream ss1;
     bencode::list l1;
 
-    l1.push_back(bencode::make_integer(4687327));
-    l1.push_back(bencode::make_string("Decimal data"));
+    l1.insert(bencode::make_integer(4687327));
+    l1.insert(bencode::make_string("Decimal data"));
 
     l1.dump(ss1);
     BOOST_CHECK(ss1.str() == "li4687327e12:Decimal datae");
@@ -70,8 +70,8 @@ BOOST_AUTO_TEST_CASE(test_dump)
     std::wstringstream ss2;
     bencode::wlist l2;
 
-    l2.push_back(bencode::make_integer<wchar_t>(65732498));
-    l2.push_back(bencode::make_string<wchar_t>(
+    l2.insert(bencode::make_integer<wchar_t>(65732498));
+    l2.insert(bencode::make_string<wchar_t>(
         L"Persistence homology classes"));
 
     l2.dump(ss2);

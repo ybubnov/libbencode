@@ -20,21 +20,30 @@ template
 private:
     using basic_value_type = basic_value<CharT, Traits>;
 
+public:
+    /**
+     *  @brief String allocator.
+     */
     using allocator_type = Allocator<CharT>;
 
-public:
     /**
      *  @brief Internal string type.
      */
     using string_type = std::basic_string<CharT, Traits, allocator_type>;
 
     /**
-     *
+     *  @brief Unsigned integral type of the string size.
      */
     using size_type = typename string_type::size_type;
 
+    /**
+     *  @brief Mutable symbols iterator.
+     */
     using iterator = typename string_type::iterator;
 
+    /**
+     *  @brief Immutable (constant) symbols iterator.
+     */
     using const_iterator = typename string_type::const_iterator;
 
     /**
@@ -184,7 +193,7 @@ public:
      *  any null-termination.
      */
     size_type
-    length() const
+    size() const
     { return _M_value.length(); }
 
     /**
