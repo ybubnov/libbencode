@@ -29,10 +29,10 @@ template
 > class basic_dict : public basic_value<CharT, Traits>
 {
 private:
-    // Define the dict key alias.
+    // Define the dictionary key alias.
     using key_type = basic_string<CharT, Traits, Allocator>;
 
-    // Define the dict value alias.
+    // Define the dictionary value alias.
     using basic_value_type = basic_value<CharT, Traits>;
 
     // Define the shared pointer type of basic values.
@@ -54,7 +54,7 @@ private:
 
 public:
     /**
-     *  @brief Key-value pair for the dict container.
+     *  @brief Key-value pair for the dictionary container.
      */
     using value_type = std::pair<const key_type, value_ptr_type>;
 
@@ -100,7 +100,7 @@ public:
     { }
 
     /**
-     *  @brief Constuct a dictionary using downcasted reference to the
+     *  @brief Construct a dictionary using downcasted reference to the
      *         basic type.
      *  @param __value  Reference to the basic type.
      */

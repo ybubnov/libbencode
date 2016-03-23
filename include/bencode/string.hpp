@@ -65,6 +65,8 @@ public:
     /**
      *  @brief Construct a string using downcasted pointer to the basic type.
      *  @param __ptr  Shared pointer to the basic type.
+     *
+     *  The pointer should not be equal to `nullptr`, it will not be checked.
      */
     basic_string(const std::shared_ptr<basic_value_type>& __ptr)
     : basic_string(*__ptr)
@@ -257,7 +259,7 @@ public:
     { return _M_value == __s._M_value; }
 
     /**
-     *  @brief Test the equivalcen of the strings.
+     *  @brief Test the equivalence of the strings.
      *  @param __s  Source string.
      *
      *  Returns True if the specified string is equal to this one, False
