@@ -17,5 +17,7 @@ int main(int argc, char **argv)
     auto bint = "i666e"_bencode;
     bs << *bint;
 
+    bencode::list l1(2);
+
     return 0;
 }

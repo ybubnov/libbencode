@@ -269,20 +269,6 @@ public:
     operator==(const string_type& __s)
     { return _M_value == __s; }
 
-    /**
-     *  @brief Write string to a stream.
-     *  @param __s  Output stream.
-     *  @param __v  String to write out.
-     *  @return  Reference to the output stream.
-     *
-     *  Output characters of @a __v into __s following the same rules as for
-     *  writing a %string.
-     */
-    friend std::basic_ostream<CharT, Traits>&
-    operator<<(std::basic_ostream<CharT, Traits>& __s,
-        const basic_string& __v)
-    { __s << __v._M_value; return __s; }
-
 private:
     string_type _M_value;
 };

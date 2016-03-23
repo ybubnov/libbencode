@@ -63,12 +63,6 @@ public:
     using const_iterator = typename container_type::const_iterator;
 
     /**
-     *  @brief Construct an empty list.
-     */
-    basic_list()
-    { }
-
-    /**
      *  @brief Construct a list using downcasted reference to the basic type.
      *  @param __value  Reference to the basic type.
      */
@@ -85,7 +79,7 @@ public:
      *
      *  The pointer should not be equal to `nullptr`, it will not be checked.
      */
-    basic_list(const std::shared_ptr<basic_value_type&> __ptr)
+    basic_list(const std::shared_ptr<basic_value_type>& __ptr)
     : basic_list(*__ptr)
     { }
 
@@ -93,7 +87,7 @@ public:
      *  @brief Construct a list with pre-allocated count of elements.
      *  @param __count  Count to elements to allocate.
      */
-    basic_list(std::size_t __count)
+    basic_list(std::size_t __count = 0)
     :_M_container(__count)
     { }
 

@@ -281,20 +281,6 @@ public:
     operator<=(const value_type __i) const noexcept(true)
     { return _M_value <= __i; }
 
-    /**
-     *  @brief Write integer to a stream.
-     *  @param __s  Output stream.
-     *  @param __i  Integer to write out.
-     *  @return  Reference to the output stream.
-     *
-     *  Output value of @a __i integer into __s following the same rules as for
-     *  writing an %integer.
-     */
-    friend std::basic_ostream<CharT, Traits>&
-    operator<<(std::basic_ostream<CharT, Traits>& __s,
-        const basic_integer& __i)
-    { __s << __i._M_value; return __s; }
-
 private:
     value_type _M_value;
 };
