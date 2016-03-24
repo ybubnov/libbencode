@@ -7,7 +7,6 @@ INCLUDE := -Iinclude
 INCLUDE += -Iinclude/bencode
 
 SOURCE  := include/bencode/*.hpp
-SOURCE  += src/bencode/*.cpp
 
 TESTS   := $(wildcard test/*.cpp)
 RUNNERS := $(subst .cpp,.out,$(TESTS))

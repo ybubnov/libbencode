@@ -46,6 +46,25 @@ public:
 };
 
 
+// Construct a new instance of the base exception.
+inline
+exception::exception(const std::string& __s)
+: _M_msg(__s) { }
+
+
+// Deconstruct an instance of the base exception.
+inline
+exception::~exception()
+{ }
+
+
+// Pointer to a null-terminated string with explanatory information.
+inline
+const char*
+exception::what() const noexcept (true)
+{ return _M_msg.c_str(); }
+
+
 /**
  *  @brief Type exception class.
  *
@@ -67,6 +86,13 @@ public:
 };
 
 
+// Construct a new instance of the type exception.
+inline
+type_error::type_error(const std::string& __s)
+: exception(__s)
+{ }
+
+
 /**
  *  @brief Value exception class.
  *
@@ -84,6 +110,13 @@ public:
     explicit
     value_error(const std::string& __s);
 };
+
+
+// Construct a new instance of the value exception.
+inline
+value_error::value_error(const std::string& __s)
+: exception(__s)
+{ }
 
 
 /**
@@ -105,6 +138,13 @@ public:
     explicit
     encoding_error(const std::string &__s);
 };
+
+
+// Construct a new instance of the encoding exception.
+inline
+encoding_error::encoding_error(const std::string& __s)
+: exception(__s)
+{ }
 
 
 } // namespace bencode
