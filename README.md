@@ -26,12 +26,12 @@ $ make
 $ make test
 ```
 
-By default library will installed into the ```/usr/local``` directory. The destination path could be changed by specifying the ```-DCMAKE_INSTALL_PREFIX``` attribute on the step of makefile generation:
+By default library will be installed into the ```/usr/local``` directory. The destination path could be changed by specifying the ```-DCMAKE_INSTALL_PREFIX``` attribute on the step of makefile generation:
 ```bash
 $ cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 ```
 
-The library consits only from the headers file, therefore the installation does not require any source code compliation:
+The library consits only of the headers file, therefore the installation does not require any source code compilation:
 ```
 $ make install
 ```
