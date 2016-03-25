@@ -1,8 +1,5 @@
 .PHONY: all, clean, test
 
-NAME    := main
-
-BUILD   := build
 INCLUDE := -Iinclude
 INCLUDE += -Iinclude/bencode
 
@@ -21,7 +18,7 @@ WARNING += -Wpedantic
 WARNING += -Werror
 WARNING += -Wunused
 
-CCFLAGS  := $(WARNING) $(INCLUDE) -g -std=c++11
+CCFLAGS := $(WARNING) $(INCLUDE) -std=c++11
 
 OBJECTS := $(wildcard $(SOURCE))
 OBJECTS := $(subst .hpp,.o,$(OBJECTS))
@@ -29,19 +26,13 @@ OBJECTS := $(subst .cpp,.o,$(OBJECTS))
 
 CXX     := g++
 
-all: $(BUILD) $(BUILD)/$(NAME)
+all: test
 
 %.o: %.hpp
 	$(CXX) $(CCFLAGS) -x c++ -c $^ -o $@
 
 %.o: %.cpp
 	$(CXX) $(CCFLAGS) -x c++ -c $^ -o $@
-
-$(BUILD):
-	mkdir -p $(BUILD)
-
-$(BUILD)/$(NAME): main.cpp $(OBJECTS)
-	$(CXX) $(CCFLAGS) $^ -o $@
 
 test/%: test/%.cpp $(OBJECTS)
 	$(CXX) $(CCFLAGS) -o $@ $^ $(DEVLIBS)
@@ -52,6 +43,5 @@ run-%: test/%
 test: $(RUNNERS) $(subst test/,run-,$(RUNNERS))
 
 clean:
-	rm -rf $(BUILD)
 	rm -rf $(OBJECTS)
 	rm -rf $(RUNNERS)
