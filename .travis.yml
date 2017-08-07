@@ -1,0 +1,25 @@
+---
+language: cpp
+
+cache:
+  apt: true
+
+addons:
+  apt:
+    sources:
+      - boost-latest
+    packages:
+      - libboost-all-dev
+
+compiler:
+  - g++
+
+script:
+  - mkdir -p build
+  - cd build
+  - cmake ..
+  - make
+  - make test
+
+notifications:
+  email: false
