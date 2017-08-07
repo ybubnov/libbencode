@@ -1,5 +1,7 @@
 # libbencode - The Bencode coding library
 
+[![Build Status][BuildStatus]](https://travis-ci.org/ybubnov/libbencode)
+
 The Bencode library is an elementary template-based implementation of the data serialization into the Bencode format. The Bencode format is commonly used in the [BitTorrent](https://wiki.theory.org/BitTorrentSpecification) protocol to encode the metadata of torrents.
 
 ## Installation
@@ -94,3 +96,5 @@ auto d = "d5:first:i1e6:second:i2ee"_bencode;
 ## License
 
 The Bencode library is distributed under MIT license, therefore you are free to do with code whatever you want. See the [LICENSE](LICENSE) file for full license text.
+
+[BuildStatus]:   https://travis-ci.org/ybubnov/libbencode.svg?branch=master
