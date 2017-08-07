@@ -20,15 +20,15 @@ namespace bencode
  *  @param __result  Output iterator.
  *  @param __pred    Unary predicate to use.
  *
- *  Copies the values starting from the @a __first input iterator until
+ *  Copies the values starting from the @a __first forward iterator until
  *  the @a __last input iterator unless the specified predicate returns
  *  False.
  */
 template
-< typename InputIterator
+< typename ForwardIterator
 , typename OutputIterator
 , typename Predicate >
-InputIterator copy_until(InputIterator __first, InputIterator __last,
+ForwardIterator copy_until(ForwardIterator __first, ForwardIterator __last,
     OutputIterator __result, Predicate __pred)
 {
     for (; __pred(*__first) && __first != __last;
@@ -48,21 +48,20 @@ InputIterator copy_until(InputIterator __first, InputIterator __last,
  *  @tparam Distance        Iterator distance type.
  *
  *  @param __first   Start of the copy range.
- *  @param __last    End of the copy range.
  *  @param __result  Output iterator.
  *  @param __pred    Unary predicate to use.
  *  @param __len     Count of elements to copy.
  *
- *  Copies the values starting from the @a __first input iterator until
- *  the @a __last input iterator unless the provided predicate returns
- *  False or specified count of elements already copied.
+ *  Copies @a __len values from the @a __first forward iterator to @a
+ *  __result output iterator unless the provided predicate returns False
+ *  or specified count of elements already copied.
  */
 template
-< typename InputIterator
+< typename ForwardIterator
 , typename OutputIterator
 , typename Predicate
 , typename Distance >
-InputIterator copy_until(InputIterator __first, OutputIterator __result,
+ForwardIterator copy_until(ForwardIterator __first, OutputIterator __result,
     Predicate __pred, Distance __len)
 {
     auto __last = __first;
